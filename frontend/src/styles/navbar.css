@@ -12,21 +12,22 @@
 
 .navbar {
   display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: space-between; /* Space between the button and logo */
-  padding: 30px 20px; /* Padding around the navbar */
-  background-color: #f8f9fa; /* Light background color for the navbar */
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 20px;
+  background-color: #f8f9fa;
 }
 
 .logo-container {
-  flex-grow: 1; /* Allows the container to take up any extra space */
+  flex-grow: 1;
   display: flex;
-  justify-content: center; /* Center the logo within the container */
+  justify-content: center;
   z-index: 100;
   position: absolute;
   margin-left: 33%;
+  margin-top: 20px;
 }
 
 .logo-container img {
-  height: 40px; /* Adjust based on your logo's size */
+  height: 40px;
 }

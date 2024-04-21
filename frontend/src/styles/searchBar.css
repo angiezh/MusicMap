@@ -1,7 +1,8 @@
 .maplibregl-ctrl-top-right {
   left: 0;
   right: auto;
-  margin-left: 10px;
+  margin-left: 80px;
+  margin-top: 12px;
 }
 
 form.svelte-zh3kmv.svelte-zh3kmv,
@@ -9,4 +10,15 @@ form.svelte-zh3kmv.svelte-zh3kmv:focus-within,
 form.svelte-zh3kmv.svelte-zh3kmv:hover {
   width: 400px;
   max-width: 400px;
+  height: 32px;
+  padding-top: 1px;
+}
+
+input.svelte-zh3kmv.svelte-zh3kmv {
+  font-size: 20px;
+}
+
+.maplibregl-ctrl-geocoder:not(.maptiler-ctrl) .search-button svg {
+  width: 20px !important;
+  padding-bottom: 2px;
 }
