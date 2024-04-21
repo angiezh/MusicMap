@@ -17,7 +17,6 @@ const SongPostSideBar = ({
         <div className="overlay__content">
           <section>
             <div className="overlay__section-text">Songs in this location:</div>
-            {console.log(posts)}
             {posts.map((post, index) => (
               <SongPost
                 song={post.song}

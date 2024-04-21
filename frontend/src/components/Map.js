@@ -32,9 +32,6 @@ const Map = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(null);
 
   const addPosts = (newPosts) => {
-    console.log("Type of newPosts:", typeof newPosts); // Should be 'object'
-    console.log("Is array:", Array.isArray(newPosts)); // Should be true
-    console.log("New posts data:", newPosts);
     setPost((prevPosts) => [...prevPosts, ...newPosts]);
   };
 
@@ -50,13 +47,13 @@ const Map = () => {
     }
   };
 
-  // const closeOverlay = () => {
-  //   setShowSongPostSidebar(false);
-  //   if (selectedNoteId) {
-  //     map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
-  //     setSelectedNoteId(null);
-  //   }
-  // };
+  const closeOverlay = () => {
+    setShowSongPostSidebar(false);
+    if (selectedNoteId) {
+      map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
+      setSelectedNoteId(null);
+    }
+  };
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -103,6 +100,7 @@ const Map = () => {
           type: "geojson",
           data: postData,
         });
+
         mapInstance.addLayer({
           id: "musicNotePins",
           type: "symbol",
@@ -135,28 +133,23 @@ const Map = () => {
           const id = features[0].properties.id;
           setSelectedNoteId(id);
           console.log("Music note clicked with id: ", id);
-          console.log("selected id", selectedNoteId);
+          console.log("music note clicked, selected id:", selectedNoteId);
           if (mapInstance.getLayer(tempLayerId)) {
             mapInstance.removeLayer(tempLayerId);
             mapInstance.removeSource(tempSourceId);
           }
           setShowSongPostSidebar(true);
           setShowAddSongSidebar(false);
-          console.log("Music note clicked");
 
           const properties = features[0].properties;
           const posts = JSON.parse(properties.posts);
 
-          console.log("posts array before adding to the array: ", posts);
-
           addPosts(posts);
-          console.log("what post has been set to: ", post);
         } else {
           // if user clicks on an empty space
           const { lng, lat } = e.lngLat;
-          setSelectedNoteId(null);
-          console.log("empty space, logged id = ", selectedNoteId);
-          removeTempLayer();
+
+          closeOverlay();
 
           mapInstance.addSource(tempSourceId, {
             type: "geojson",
@@ -206,16 +199,18 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
-    if (map.current && map.current.isStyleLoaded()) {
-      map.current.setLayoutProperty("musicNotePins", "icon-image", [
-        "case",
-        ["==", ["get", "id"], selectedNoteId],
-        "selectedMusicNote",
-        "musicNote",
-      ]);
-    }
+    if (!map.current || !map.current.isStyleLoaded()) return;
 
-    console.log("new id", selectedNoteId);
+    // Ensures that every time the selectedNoteId changes, the icon updates accordingly
+    map.current.setLayoutProperty("musicNotePins", "icon-image", [
+      "case",
+      ["==", ["get", "id"], selectedNoteId],
+      "selectedMusicNote", // This applies only if there is a selected note
+      "musicNote", // Default icon
+    ]);
+
+    // Logs to check what is being set
+    console.log("current id", selectedNoteId);
   }, [selectedNoteId]);
 
   // const handleSubmit = (e) => {
