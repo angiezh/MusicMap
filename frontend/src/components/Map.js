@@ -261,6 +261,7 @@ const Map = () => {
       {showSongPostSidebar && (
         <SongPostSideBar
           closeSongPostSidebar={() => setShowSongPostSidebar(false)}
+          openAddSongSidebar={() => setShowAddSongSidebar(true)}
           posts={post}
         />
       )}

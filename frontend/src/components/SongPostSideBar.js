@@ -1,7 +1,11 @@
 import "../styles/sidebar.css";
 import SongPost from "./SongPost";
 
-const SongPostSideBar = ({ closeSongPostSidebar, posts }) => {
+const SongPostSideBar = ({
+  closeSongPostSidebar,
+  openAddSongSidebar,
+  posts,
+}) => {
   return (
     <aside className="overlay overlay--add">
       <div className="action-button-container">
@@ -23,6 +27,14 @@ const SongPostSideBar = ({ closeSongPostSidebar, posts }) => {
             ))}
           </section>
         </div>
+        <button
+          onClick={() => {
+            closeSongPostSidebar();
+            openAddSongSidebar();
+          }}
+        >
+          Add Song at this Location
+        </button>
       </div>
     </aside>
   );
