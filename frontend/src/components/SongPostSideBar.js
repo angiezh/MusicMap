@@ -1,7 +1,7 @@
 import "../styles/sidebar.css";
 import SongPost from "./SongPost";
 
-const SongPostSideBar = ({ closeSongPostSidebar, song, notes }) => {
+const SongPostSideBar = ({ closeSongPostSidebar, posts }) => {
   return (
     <aside className="overlay overlay--add">
       <div className="action-button-container">
@@ -13,7 +13,14 @@ const SongPostSideBar = ({ closeSongPostSidebar, song, notes }) => {
         <div className="overlay__content">
           <section>
             <div className="overlay__section-text">Songs in this location:</div>
-            <SongPost song={song} description={notes} />
+            {console.log(posts)}
+            {posts.map((post, index) => (
+              <SongPost
+                song={post.song}
+                description={post.description}
+                key={index}
+              />
+            ))}
           </section>
         </div>
       </div>

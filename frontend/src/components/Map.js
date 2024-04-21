@@ -28,9 +28,35 @@ const Map = () => {
 
   const [showAddSongSidebar, setShowAddSongSidebar] = useState(false);
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
-  const [sidebarPostalCode, setSidebarPostalCode] = useState("");
-  const [notes, setNotes] = useState("");
-  const [song, setSong] = useState("");
+  const [post, setPost] = useState([]);
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+
+  const addPosts = (newPosts) => {
+    console.log("Type of newPosts:", typeof newPosts); // Should be 'object'
+    console.log("Is array:", Array.isArray(newPosts)); // Should be true
+    console.log("New posts data:", newPosts);
+    setPost((prevPosts) => [...prevPosts, ...newPosts]);
+  };
+
+  const removeTempLayer = () => {
+    const tempLayerId = "tempMusicNoteLayer";
+    const tempSourceId = "tempMusicNote";
+
+    if (map.current.getLayer(tempLayerId)) {
+      map.current.removeLayer(tempLayerId);
+    }
+    if (map.current.getSource(tempSourceId)) {
+      map.current.removeSource(tempSourceId);
+    }
+  };
+
+  // const closeOverlay = () => {
+  //   setShowSongPostSidebar(false);
+  //   if (selectedNoteId) {
+  //     map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
+  //     setSelectedNoteId(null);
+  //   }
+  // };
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -44,6 +70,7 @@ const Map = () => {
       maxZoom: 18,
     });
 
+    // When the map loads
     mapInstance.on("load", () => {
       console.log("Map loaded successfully");
 
@@ -56,11 +83,13 @@ const Map = () => {
         apiKey: maptilerApiKey,
         map: mapInstance,
       });
+
       mapInstance.addControl(gc);
       mapInstance.keyboard.enable();
 
+      // load music note icons
       const selectedNote = new Image();
-      selectedNote.src = selectedMusicNote; // Ensure this is a different image file for the selected state
+      selectedNote.src = selectedMusicNote;
       selectedNote.onload = () => {
         mapInstance.addImage("selectedMusicNote", selectedNote);
       };
@@ -74,15 +103,18 @@ const Map = () => {
           type: "geojson",
           data: postData,
         });
-
         mapInstance.addLayer({
           id: "musicNotePins",
           type: "symbol",
           source: "musicNotes",
           layout: {
-            "icon-image": "musicNote",
+            "icon-image": [
+              "case",
+              ["==", ["get", "id"], selectedNoteId],
+              "selectedMusicNote",
+              "musicNote",
+            ],
             "icon-allow-overlap": true,
-            "icon-size": 1,
           },
         });
       };
@@ -98,6 +130,12 @@ const Map = () => {
 
         // if user clicks on the music note
         if (features.length > 0) {
+          setPost([]);
+          removeTempLayer();
+          const id = features[0].properties.id;
+          setSelectedNoteId(id);
+          console.log("Music note clicked with id: ", id);
+          console.log("selected id", selectedNoteId);
           if (mapInstance.getLayer(tempLayerId)) {
             mapInstance.removeLayer(tempLayerId);
             mapInstance.removeSource(tempSourceId);
@@ -107,19 +145,18 @@ const Map = () => {
           console.log("Music note clicked");
 
           const properties = features[0].properties;
-          const song = properties.song;
-          const description = properties.description;
+          const posts = JSON.parse(properties.posts);
 
-          setSong(song);
-          setNotes(description);
+          console.log("posts array before adding to the array: ", posts);
+
+          addPosts(posts);
+          console.log("what post has been set to: ", post);
         } else {
           // if user clicks on an empty space
           const { lng, lat } = e.lngLat;
-
-          if (mapInstance.getLayer(tempLayerId)) {
-            mapInstance.removeLayer(tempLayerId);
-            mapInstance.removeSource(tempSourceId);
-          }
+          setSelectedNoteId(null);
+          console.log("empty space, logged id = ", selectedNoteId);
+          removeTempLayer();
 
           mapInstance.addSource(tempSourceId, {
             type: "geojson",
@@ -157,8 +194,7 @@ const Map = () => {
     map.current = mapInstance;
 
     // Function to open the sidebar
-    window.openSidebar = (postalCode) => {
-      setSidebarPostalCode(postalCode);
+    window.openSidebar = () => {
       setShowAddSongSidebar(true);
     };
 
@@ -169,30 +205,43 @@ const Map = () => {
     };
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (map.current && map.current.isStyleLoaded()) {
+      map.current.setLayoutProperty("musicNotePins", "icon-image", [
+        "case",
+        ["==", ["get", "id"], selectedNoteId],
+        "selectedMusicNote",
+        "musicNote",
+      ]);
+    }
 
-    // Create JSON object with the selected drug type, notes, zip code, and reportedAt timestamp
-    const reportData = {
-      notes: notes,
-      zipCode: sidebarPostalCode,
-      reportedAt: new Date().toISOString(),
-    };
+    console.log("new id", selectedNoteId);
+  }, [selectedNoteId]);
 
-    // Submit the report data to your backend API
-    axios
-      .post("http://localhost:8800/api/reports", reportData)
-      .then((response) => {
-        console.log("Report submitted successfully:", response.data);
-        // Optionally, you can reset the form fields or close the sidebar after successful submission
-        setNotes("");
-        setShowAddSongSidebar(false);
-      })
-      .catch((error) => {
-        console.error("Error submitting report:", error);
-        // Handle error, display error message, etc.
-      });
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   // Create JSON object with the selected drug type, notes, zip code, and reportedAt timestamp
+  //   const reportData = {
+  //     notes: notes,
+  //     zipCode: sidebarPostalCode,
+  //     reportedAt: new Date().toISOString(),
+  //   };
+
+  //   // Submit the report data to your backend API
+  //   axios
+  //     .post("http://localhost:8800/api/reports", reportData)
+  //     .then((response) => {
+  //       console.log("Report submitted successfully:", response.data);
+  //       // Optionally, you can reset the form fields or close the sidebar after successful submission
+  //       setNotes("");
+  //       setShowAddSongSidebar(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error submitting report:", error);
+  //       // Handle error, display error message, etc.
+  //     });
+  // };
 
   return (
     <>
@@ -203,14 +252,16 @@ const Map = () => {
       />
       {showAddSongSidebar && (
         <AddSongSideBar
-          closeAddSongSidebar={() => setShowAddSongSidebar(false)}
+          closeAddSongSidebar={() => {
+            setShowAddSongSidebar(false);
+            removeTempLayer();
+          }}
         />
       )}
       {showSongPostSidebar && (
         <SongPostSideBar
           closeSongPostSidebar={() => setShowSongPostSidebar(false)}
-          song={song}
-          notes={notes}
+          posts={post}
         />
       )}
     </>

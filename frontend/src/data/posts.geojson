@@ -5,8 +5,16 @@
       "type": "Feature",
       "properties": {
         "id": 1,
-        "song": "Snooze by SZA",
-        "description": "Really awesome song that my friend showed me last month and we listened to it a lot together."
+        "posts": [
+          {
+            "song": "Snooze by SZA",
+            "description": "Really awesome song that my friend showed me last month and we listened to it a lot together."
+          },
+          {
+            "song": "Another Song at Same Spot",
+            "description": "Another description."
+          }
+        ]
       },
       "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
     },
@@ -14,8 +22,12 @@
       "type": "Feature",
       "properties": {
         "id": 2,
-        "song": "Love Story by Taylor Swift",
-        "description": "I listened to this song walking to the Hive."
+        "posts": [
+          {
+            "song": "Love Story by Taylor Swift",
+            "description": "I listened to this song walking to the Hive."
+          }
+        ]
       },
       "geometry": { "type": "Point", "coordinates": [-117.71931, 34.10661] }
     },
@@ -23,8 +35,16 @@
       "type": "Feature",
       "properties": {
         "id": 3,
-        "song": "Good Days by SZA",
-        "description": "I listened to this song everyday freshman year."
+        "posts": [
+          {
+            "song": "Sample song by artist",
+            "description": "This is a test song"
+          },
+          {
+            "song": "Good Days by SZA",
+            "description": "I listened to this song everyday freshman year."
+          }
+        ]
       },
       "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
     }
