@@ -36,6 +36,7 @@ const Map = () => {
     setPost((prevPosts) => [...prevPosts, ...newPosts]);
   };
 
+  // removes temporary selected marker
   const removeTempLayer = () => {
     if (map.current.getLayer(tempLayerId)) {
       map.current.removeLayer(tempLayerId);
@@ -45,12 +46,11 @@ const Map = () => {
     }
   };
 
+  // closes posts overlay and
   const closePostOverlay = () => {
     setShowSongPostSidebar(false);
-    if (selectedNoteId) {
-      map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
-      setSelectedNoteId(null);
-    }
+    map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
+    setSelectedNoteId(null);
   };
 
   useEffect(() => {
@@ -137,9 +137,10 @@ const Map = () => {
         } else {
           // if user clicks on an empty space
           const { lng, lat } = e.lngLat;
-          closePostOverlay();
           removeTempLayer();
+          closePostOverlay();
 
+          // creates temporary marker
           mapInstance.addSource(tempSourceId, {
             type: "geojson",
             data: {
@@ -236,8 +237,9 @@ const Map = () => {
       {showAddSongSidebar && (
         <AddSongSideBar
           closeAddSongSidebar={() => {
-            setShowAddSongSidebar(false);
             removeTempLayer();
+            setShowAddSongSidebar(false);
+            closePostOverlay();
           }}
         />
       )}
