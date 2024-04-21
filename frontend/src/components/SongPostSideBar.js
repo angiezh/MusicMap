@@ -28,7 +28,6 @@ const SongPostSideBar = ({
         </div>
         <button
           onClick={() => {
-            closeSongPostSidebar();
             openAddSongSidebar();
           }}
         >

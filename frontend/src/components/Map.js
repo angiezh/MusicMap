@@ -25,20 +25,18 @@ const Map = () => {
     lat: 34.099885457669316,
     zoom: 16.5,
   };
-
   const [showAddSongSidebar, setShowAddSongSidebar] = useState(false);
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
   const [post, setPost] = useState([]);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const tempLayerId = "tempMusicNoteLayer";
+  const tempSourceId = "tempMusicNote";
 
   const addPosts = (newPosts) => {
     setPost((prevPosts) => [...prevPosts, ...newPosts]);
   };
 
   const removeTempLayer = () => {
-    const tempLayerId = "tempMusicNoteLayer";
-    const tempSourceId = "tempMusicNote";
-
     if (map.current.getLayer(tempLayerId)) {
       map.current.removeLayer(tempLayerId);
     }
@@ -47,7 +45,7 @@ const Map = () => {
     }
   };
 
-  const closeOverlay = () => {
+  const closePostOverlay = () => {
     setShowSongPostSidebar(false);
     if (selectedNoteId) {
       map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
@@ -123,21 +121,12 @@ const Map = () => {
           layers: ["musicNotePins"],
         });
 
-        const tempSourceId = "tempMusicNote";
-        const tempLayerId = "tempMusicNoteLayer";
-
         // if user clicks on the music note
         if (features.length > 0) {
-          setPost([]);
           removeTempLayer();
+          setPost([]);
           const id = features[0].properties.id;
           setSelectedNoteId(id);
-          console.log("Music note clicked with id: ", id);
-          console.log("music note clicked, selected id:", selectedNoteId);
-          if (mapInstance.getLayer(tempLayerId)) {
-            mapInstance.removeLayer(tempLayerId);
-            mapInstance.removeSource(tempSourceId);
-          }
           setShowSongPostSidebar(true);
           setShowAddSongSidebar(false);
 
@@ -148,8 +137,8 @@ const Map = () => {
         } else {
           // if user clicks on an empty space
           const { lng, lat } = e.lngLat;
-
-          closeOverlay();
+          closePostOverlay();
+          removeTempLayer();
 
           mapInstance.addSource(tempSourceId, {
             type: "geojson",
@@ -175,7 +164,6 @@ const Map = () => {
 
           // Pulls up add song sidebar
           setShowAddSongSidebar(true);
-          setShowSongPostSidebar(false);
         }
       });
     });
@@ -255,8 +243,11 @@ const Map = () => {
       )}
       {showSongPostSidebar && (
         <SongPostSideBar
-          closeSongPostSidebar={() => setShowSongPostSidebar(false)}
-          openAddSongSidebar={() => setShowAddSongSidebar(true)}
+          closeSongPostSidebar={() => closePostOverlay()}
+          openAddSongSidebar={() => {
+            setShowAddSongSidebar(true);
+            setShowSongPostSidebar(false);
+          }}
           posts={post}
         />
       )}
