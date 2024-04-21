@@ -46,7 +46,7 @@ const Map = () => {
     }
   };
 
-  // closes posts overlay and
+  // closes posts overlay and deselects all notes
   const closePostOverlay = () => {
     setShowSongPostSidebar(false);
     map.current.setLayoutProperty("musicNotePins", "icon-image", "musicNote");
@@ -187,19 +187,16 @@ const Map = () => {
     };
   }, []);
 
+  // changes music note to be selected when selectedNoteId changes
   useEffect(() => {
     if (!map.current || !map.current.isStyleLoaded()) return;
 
-    // Ensures that every time the selectedNoteId changes, the icon updates accordingly
     map.current.setLayoutProperty("musicNotePins", "icon-image", [
       "case",
       ["==", ["get", "id"], selectedNoteId],
-      "selectedMusicNote", // This applies only if there is a selected note
-      "musicNote", // Default icon
+      "selectedMusicNote",
+      "musicNote",
     ]);
-
-    // Logs to check what is being set
-    console.log("current id", selectedNoteId);
   }, [selectedNoteId]);
 
   // const handleSubmit = (e) => {
