@@ -1,4 +1,5 @@
-import "../styles/sidebar.css";
+import React from "react";
+import "../styles/sidebar.css"; // Import the sidebar styles
 import SongPost from "./SongPost";
 
 const SongPostSideBar = ({
@@ -19,7 +20,7 @@ const SongPostSideBar = ({
             <div className="overlay__section-text">Songs in this location:</div>
             {posts.map((post, index) => (
               <SongPost
-                song={post.song}
+                songID={post.song}
                 description={post.description}
                 key={index}
               />
