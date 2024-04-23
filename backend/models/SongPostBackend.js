@@ -2,14 +2,7 @@ const mongoose = require('mongoose');
 
 const SongPostSchema = new mongoose.Schema({
   username: { type: String, default: 'Anonymous' }, // User-provided name/alias
-  song: { // Subdocument for song details
-    id: String, // Spotify song ID
-    name: String, // Name of the song
-    artist: String, // Artist of the song
-    album: String, // Album name
-    preview_url: String, // URL for the song preview
-    image_url: String // URL for the album image
-  },
+  song_id: { type: String, required: true },
   description: String, // Description or story about the song
   location: { // Geographic coordinates for the song note
     type: { type: String, enum: ['Point'], default: 'Point' },
@@ -26,6 +19,6 @@ const SongPostSchema = new mongoose.Schema({
 
 SongPostSchema.index({ location: '2dsphere' }); // Index for geospatial queries
 
-const SongPost = mongoose.model('SongPost', SongPostSchema);
+const SongPost = mongoose.model('SongPostBackend', SongPostSchema);
 
 module.exports = SongPost;
