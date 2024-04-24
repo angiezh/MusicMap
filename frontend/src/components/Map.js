@@ -9,8 +9,6 @@ import "../styles/map.css";
 import axios from "axios";
 import AddSongSideBar from "./AddSongSideBar";
 import selectedMusicNote from "../assets/selected-music-note.png";
-
-import postData from "../data/posts.geojson";
 import musicNote from "../assets/musicnote.png";
 import SongPostSideBar from "./SongPostSideBar";
 
@@ -27,13 +25,11 @@ const Map = () => {
   };
   const [showAddSongSidebar, setShowAddSongSidebar] = useState(false);
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
-  const [post, setPost] = useState([]);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
-  const [lng, setLng] = useState("");
-  const [lat, setLat] = useState("");
-
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
+
+  const [post, setPost] = useState([]); // Declare setPost here
 
   const addPosts = (newPosts) => {
     setPost((prevPosts) => [...prevPosts, ...newPosts]);
@@ -59,141 +55,170 @@ const Map = () => {
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    const mapInstance = new maplibregl.Map({
-      container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/${maptilerMapReference}/style.json?key=${maptilerApiKey}`,
-      center: [initialState.lng, initialState.lat],
-      zoom: initialState.zoom,
-      minZoom: 2,
-      maxZoom: 18,
-    });
-
-    // When the map loads
-    mapInstance.on("load", () => {
-      console.log("Map loaded successfully");
-
-      mapInstance.addControl(
-        new maplibregl.NavigationControl({ showCompass: false }),
-        "bottom-right"
-      );
-
-      const gc = new GeocodingControl({
-        apiKey: maptilerApiKey,
-        map: mapInstance,
-      });
-
-      mapInstance.addControl(gc);
-      mapInstance.keyboard.enable();
-
-      // load music note icons
-      const selectedNote = new Image();
-      selectedNote.src = selectedMusicNote;
-      selectedNote.onload = () => {
-        mapInstance.addImage("selectedMusicNote", selectedNote);
-      };
-
-      const regularNote = new Image();
-      regularNote.src = musicNote;
-      regularNote.onload = () => {
-        mapInstance.addImage("musicNote", regularNote);
-
-        mapInstance.addSource("musicNotes", {
-          type: "geojson",
-          data: postData,
-        });
-
-        mapInstance.addLayer({
-          id: "musicNotePins",
-          type: "symbol",
-          source: "musicNotes",
-          layout: {
-            "icon-image": [
-              "case",
-              ["==", ["get", "id"], selectedNoteId],
-              "selectedMusicNote",
-              "musicNote",
-            ],
-            "icon-allow-overlap": true,
+    axios.get('http://localhost:8800/api/songposts')
+      .then(response => {
+        // Handle successful response
+        const postData = response.data.map(post => ({
+          type: 'Feature',
+          properties: {
+            id: post._id,
+            song_id: post.song_id,
+            username: post.username,
+            description: post.description,
+            likes: post.likes,
+            comments: post.comments
           },
+          geometry: {
+            type: 'Point',
+            coordinates: post.location.coordinates
+          }
+        }));
+
+        setPost(postData); // Set the fetched data to post state
+
+        const mapInstance = new maplibregl.Map({
+          container: mapContainer.current,
+          style: `https://api.maptiler.com/maps/${maptilerMapReference}/style.json?key=${maptilerApiKey}`,
+          center: [initialState.lng, initialState.lat],
+          zoom: initialState.zoom,
+          minZoom: 2,
+          maxZoom: 18,
         });
-      };
 
-      // if user clicks on the map
-      mapInstance.on("click", (e) => {
-        const features = mapInstance.queryRenderedFeatures(e.point, {
-          layers: ["musicNotePins"],
-        });
+        // When the map loads
+        mapInstance.on("load", () => {
+          console.log("Map loaded successfully");
 
-        // if user clicks on the music note
-        if (features.length > 0) {
-          removeTempLayer();
-          setPost([]);
-          const id = features[0].properties.id;
-          setSelectedNoteId(id);
-          setShowSongPostSidebar(true);
-          setShowAddSongSidebar(false);
+          mapInstance.addControl(
+            new maplibregl.NavigationControl({ showCompass: false }),
+            "bottom-right"
+          );
 
-          const { lng, lat } = e.lngLat;
-          setLat(lat);
-          setLng(lng);
+          const gc = new GeocodingControl({
+            apiKey: maptilerApiKey,
+            map: mapInstance,
+          });
 
-          const properties = features[0].properties;
-          const posts = JSON.parse(properties.posts);
+          mapInstance.addControl(gc);
+          mapInstance.keyboard.enable();
 
-          addPosts(posts);
-        } else {
-          // if user clicks on an empty space
-          const { lng, lat } = e.lngLat;
-          setLat(lat);
-          setLng(lng);
-          removeTempLayer();
-          closePostOverlay();
+          // load music note icons
+          const selectedNote = new Image();
+          selectedNote.src = selectedMusicNote;
+          selectedNote.onload = () => {
+            mapInstance.addImage("selectedMusicNote", selectedNote);
+          };
 
-          // creates temporary marker
-          mapInstance.addSource(tempSourceId, {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [lng, lat],
+          const regularNote = new Image();
+          regularNote.src = musicNote;
+          regularNote.onload = () => {
+            mapInstance.addImage("musicNote", regularNote);
+
+            mapInstance.addSource("musicNotes", {
+              type: "geojson",
+              data: {
+                type: 'FeatureCollection',
+                features: postData
+              }
+            });
+
+            mapInstance.addLayer({
+              id: "musicNotePins",
+              type: "symbol",
+              source: "musicNotes",
+              layout: {
+                "icon-image": [
+                  "case",
+                  ["==", ["get", "id"], selectedNoteId],
+                  "selectedMusicNote",
+                  "musicNote",
+                ],
+                "icon-allow-overlap": true,
               },
-            },
-          });
+            });
+          };
 
-          mapInstance.addLayer({
-            id: tempLayerId,
-            type: "symbol",
-            source: tempSourceId,
-            layout: {
-              "icon-image": "selectedMusicNote",
-              "icon-allow-overlap": true,
-              "icon-size": 1,
-            },
-          });
+          // if user clicks on the map
+          mapInstance.on("click", (e) => {
+            const features = mapInstance.queryRenderedFeatures(e.point, {
+              layers: ["musicNotePins"],
+            });
 
-          // Pulls up add song sidebar
+            // if user clicks on the music note
+            if (features.length > 0) {
+              removeTempLayer();
+              setPost([]);
+              const id = features[0].properties.id;
+              setSelectedNoteId(id);
+              setShowSongPostSidebar(true);
+              setShowAddSongSidebar(false);
+            
+              const posts = features.map(feature => ({
+                username: feature.properties.username,
+                song_id: feature.properties.song_id,
+                description: feature.properties.description,
+                likes: feature.properties.likes,
+                comments: feature.properties.comments
+              }));
+            
+              // Pass the posts to the SongPostSideBar component
+              addPosts(posts);
+            } else {
+              // if user clicks on an empty space
+              const { lng, lat } = e.lngLat;
+              removeTempLayer();
+              closePostOverlay();
+
+              // creates temporary marker
+              mapInstance.addSource(tempSourceId, {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: "Point",
+                    coordinates: [lng, lat],
+                  },
+                },
+              });
+
+              mapInstance.addLayer({
+                id: tempLayerId,
+                type: "symbol",
+                source: tempSourceId,
+                layout: {
+                  "icon-image": "selectedMusicNote",
+                  "icon-allow-overlap": true,
+                  "icon-size": 1,
+                },
+              });
+
+              // Pulls up add song sidebar
+              setShowAddSongSidebar(true);
+            }
+          });
+        });
+
+        mapInstance.on("error", (error) => {
+          console.error("An error occurred while loading the map:", error);
+        });
+
+        map.current = mapInstance;
+
+        // Function to open the sidebar
+        window.openSidebar = () => {
           setShowAddSongSidebar(true);
-        }
+        };
+
+        return () => {
+          if (map.current) {
+            map.current.remove();
+          }
+        };
+      })
+      .catch(error => {
+        // Handle fetch error
+        console.error('Error fetching song posts:', error);
       });
-    });
-
-    mapInstance.on("error", (error) => {
-      console.error("An error occurred while loading the map:", error);
-    });
-
-    map.current = mapInstance;
-
-    // Function to open the sidebar
-    window.openSidebar = () => {
-      setShowAddSongSidebar(true);
-    };
-
-    return () => {
-      if (map.current) {
-        map.current.remove();
-      }
-    };
   }, []);
 
   // changes music note to be selected when selectedNoteId changes
@@ -207,31 +232,6 @@ const Map = () => {
       "musicNote",
     ]);
   }, [selectedNoteId]);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // Create JSON object with the selected drug type, notes, zip code, and reportedAt timestamp
-  //   const reportData = {
-  //     notes: notes,
-  //     zipCode: sidebarPostalCode,
-  //     reportedAt: new Date().toISOString(),
-  //   };
-
-  //   // Submit the report data to your backend API
-  //   axios
-  //     .post("http://localhost:8800/api/reports", reportData)
-  //     .then((response) => {
-  //       console.log("Report submitted successfully:", response.data);
-  //       // Optionally, you can reset the form fields or close the sidebar after successful submission
-  //       setNotes("");
-  //       setShowAddSongSidebar(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error submitting report:", error);
-  //       // Handle error, display error message, etc.
-  //     });
-  // };
 
   return (
     <>
@@ -247,8 +247,6 @@ const Map = () => {
             setShowAddSongSidebar(false);
             closePostOverlay();
           }}
-          lng={lng}
-          lat={lat}
         />
       )}
       {showSongPostSidebar && (

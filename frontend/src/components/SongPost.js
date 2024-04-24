@@ -77,11 +77,11 @@ const SongPost = ({ songID, description, username, comments, likes }) => {
                     Your browser does not support the audio element.
                   </audio>
                 )}
-                <h3>@{username} </h3>
+                <h3>{username} </h3>
                 <p>{description}</p>
                 <h4>Likes: {likes}</h4>
                 <ul>
-                  {Array.isArray(comments) && comments.map((comment, index) => (
+                  {comments && Array.isArray(comments) && comments.map((comment, index) => (
                     <li key={index}>
                       <strong>{comment.username}</strong>: {comment.text}
                     </li>
