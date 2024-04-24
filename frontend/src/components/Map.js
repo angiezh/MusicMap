@@ -29,6 +29,9 @@ const Map = () => {
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
   const [post, setPost] = useState([]);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const [lng, setLng] = useState("");
+  const [lat, setLat] = useState("");
+
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
 
@@ -130,6 +133,10 @@ const Map = () => {
           setShowSongPostSidebar(true);
           setShowAddSongSidebar(false);
 
+          const { lng, lat } = e.lngLat;
+          setLat(lat);
+          setLng(lng);
+
           const properties = features[0].properties;
           const posts = JSON.parse(properties.posts);
 
@@ -137,6 +144,8 @@ const Map = () => {
         } else {
           // if user clicks on an empty space
           const { lng, lat } = e.lngLat;
+          setLat(lat);
+          setLng(lng);
           removeTempLayer();
           closePostOverlay();
 
@@ -238,6 +247,8 @@ const Map = () => {
             setShowAddSongSidebar(false);
             closePostOverlay();
           }}
+          lng={lng}
+          lat={lat}
         />
       )}
       {showSongPostSidebar && (

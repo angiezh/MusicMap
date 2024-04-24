@@ -1,0 +1,27 @@
+.infooverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    190,
+    217,
+    243,
+    0.262
+  ); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.infooverlay-content {
+  background-color: #e4e6c8;
+  padding: 30px;
+  border-radius: 30px;
+}
+.infooverlay h2 {
+  margin-top: 0;
+}
+.infooverlay button {
+  margin-top: 30px;
+}
