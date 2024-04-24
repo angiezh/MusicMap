@@ -1,90 +1,89 @@
 {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {
-          "username": "Alice",
-          "song_id": "4iZ4pt7kvcaH6Yo8UoZ4s2",
-          "description": "Really awesome song that my friend showed me last month and we listened to it a lot together.",
-          "likes": 5,
-          "comments": [
-            {
-              "username": "Bob",
-              "text": "I love this song too!",
-              "createdAt": "2024-03-01T12:00:00Z"
-            }
-          ],
-          "reportedAt": "2024-03-01T12:00:00Z"
-        },
-        "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Alice",
+        "song_id": "4iZ4pt7kvcaH6Yo8UoZ4s2",
+        "description": "Really awesome song that my friend showed me last month and we listened to it a lot together.",
+        "likes": 5,
+        "comments": [
+          {
+            "username": "Bob",
+            "text": "I love this song too!",
+            "createdAt": "2024-03-01T12:00:00Z"
+          }
+        ],
+        "reportedAt": "2024-03-01T12:00:00Z"
       },
-      {
-        "type": "Feature",
-        "properties": {
-          "username": "Charlie",
-          "song_id": "3xKsf9qdS1CyvXSMEid6g8",
-          "description": "Another description.",
-          "likes": 2,
-          "comments": [
-            {
-              "username": "Dave",
-              "text": "Not my style, but interesting.",
-              "createdAt": "2024-03-02T15:30:00Z"
-            }
-          ],
-          "reportedAt": "2024-03-02T15:30:00Z"
-        },
-        "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
+      "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Charlie",
+        "song_id": "3xKsf9qdS1CyvXSMEid6g8",
+        "description": "Another description.",
+        "likes": 2,
+        "comments": [
+          {
+            "username": "Dave",
+            "text": "Not my style, but interesting.",
+            "createdAt": "2024-03-02T15:30:00Z"
+          }
+        ],
+        "reportedAt": "2024-03-02T15:30:00Z"
       },
-      {
-        "type": "Feature",
-        "properties": {
-          "username": "Eve",
-          "song_id": "3CeCwYWvdfXbZLXFhBrbnf",
-          "description": "I listened to this song walking to the Hive.",
-          "likes": 3,
-          "comments": [
-            {
-              "username": "Frank",
-              "text": "Brings back memories!",
-              "createdAt": "2024-03-03T09:45:00Z"
-            }
-          ],
-          "reportedAt": "2024-03-03T09:45:00Z"
-        },
-        "geometry": { "type": "Point", "coordinates": [-117.71931, 34.10661] }
+      "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Eve",
+        "song_id": "3CeCwYWvdfXbZLXFhBrbnf",
+        "description": "I listened to this song walking to the Hive.",
+        "likes": 3,
+        "comments": [
+          {
+            "username": "Frank",
+            "text": "Brings back memories!",
+            "createdAt": "2024-03-03T09:45:00Z"
+          }
+        ],
+        "reportedAt": "2024-03-03T09:45:00Z"
       },
-      {
-        "type": "Feature",
-        "properties": {
-          "username": "Gwen",
-          "song_id": "3xKsf9qdS1CyvXSMEid6g8",
-          "description": "This is a test song",
-          "likes": 1,
-          "comments": [],
-          "reportedAt": "2024-03-04T08:00:00Z"
-        },
-        "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
+      "geometry": { "type": "Point", "coordinates": [-117.71931, 34.10661] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Gwen",
+        "song_id": "3xKsf9qdS1CyvXSMEid6g8",
+        "description": "This is a test song",
+        "likes": 1,
+        "comments": [],
+        "reportedAt": "2024-03-04T08:00:00Z"
       },
-      {
-        "type": "Feature",
-        "properties": {
-          "username": "Hank",
-          "song_id": "4PMqSO5qyjpvzhlLI5GnID",
-          "description": "I listened to this song everyday freshman year.",
-          "likes": 10,
-          "comments": [
-            {
-              "username": "Ivy",
-              "text": "Oh, this was my jam too!",
-              "createdAt": "2024-03-05T07:20:00Z"
-            }
-          ],
-          "reportedAt": "2024-03-05T07:20:00Z"
-        },
-        "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
-      }
-    ]
-  }
-  
+      "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Hank",
+        "song_id": "4PMqSO5qyjpvzhlLI5GnID",
+        "description": "I listened to this song everyday freshman year.",
+        "likes": 10,
+        "comments": [
+          {
+            "username": "Ivy",
+            "text": "Oh, this was my jam too!",
+            "createdAt": "2024-03-05T07:20:00Z"
+          }
+        ],
+        "reportedAt": "2024-03-05T07:20:00Z"
+      },
+      "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
+    }
+  ]
+}
