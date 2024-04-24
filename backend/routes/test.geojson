@@ -84,6 +84,29 @@
         "reportedAt": "2024-03-05T07:20:00Z"
       },
       "geometry": { "type": "Point", "coordinates": [-117.72531, 34.09661] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "username": "Angie",
+        "song_id": "4iZ4pt7kvcaH6Yo8UoZ4s2",
+        "description": "Changed my life",
+        "likes": 5,
+        "comments": [
+          {
+            "username": "Bob",
+            "text": "I love this song too!",
+            "createdAt": "2024-03-01T12:00:00Z"
+          },
+          {
+            "username": "Abrar",
+            "text": "Love hate relationship with this one!",
+            "createdAt": "2024-03-01T12:00:00Z"
+          }
+        ],
+        "reportedAt": "2024-03-01T12:00:00Z"
+      },
+      "geometry": { "type": "Point", "coordinates": [-117.71931, 34.09661] }
     }
   ]
 }

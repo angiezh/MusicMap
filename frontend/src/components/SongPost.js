@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import "../styles/sidebar.css";
 
-const SongPost = ({ songID, description }) => {
+const SongPost = ({ songID, description, username, comments, likes }) => {
   const [accessToken, setAccessToken] = useState('');
   const [songData, setSongData] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -77,7 +77,16 @@ const SongPost = ({ songID, description }) => {
                     Your browser does not support the audio element.
                   </audio>
                 )}
+                <h3>@{username} </h3>
                 <p>{description}</p>
+                <h4>Likes: {likes}</h4>
+                <ul>
+                  {Array.isArray(comments) && comments.map((comment, index) => (
+                    <li key={index}>
+                      <strong>{comment.username}</strong>: {comment.text}
+                    </li>
+                  ))}
+                </ul>
               </Card.Body>
             </Col>
           </Row>

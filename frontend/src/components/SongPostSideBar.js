@@ -22,7 +22,10 @@ const SongPostSideBar = ({
             {posts.map((post, index) => (
               <SongPost
                 songID={post.song_id} // Ensure correct property name
-                description={post.description} // Ensure correct property name
+                description={post.description} // Ensure correct property name\
+                username={post.username}
+                likes = {post.likes}
+                comments={JSON.parse(post.comments)}
                 key={index}
               />
             ))}
