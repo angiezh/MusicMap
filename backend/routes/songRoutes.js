@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const SongPost = require('../models/SongPostBackend'); // Adjust the import name to match the actual file
+const SongPost = require('../models/SongPostBackend'); // Ensure this path is correct
 
 // Route to get all song posts
 router.get('/', async (req, res) => {
@@ -28,16 +28,20 @@ router.get('/:id', async (req, res) => {
 // Route to create a new song post
 router.post('/', async (req, res) => {
   try {
-    const { username, song_id, description, location } = req.body;
+    const { properties, geometry } = req.body; // Assume the entire GeoJSON feature object is sent
     const newSongPost = new SongPost({
-      username: username || 'Anonymous', // Optional username
-      song_id, // Extracted as a string
-      description,
-      location
+      username: properties.username || 'Anonymous',
+      song_id: properties.song_id,
+      description: properties.description,
+      location: geometry,
+      likes: properties.likes || 0,
+      comments: properties.comments || [],
+      reportedAt: properties.reportedAt ? new Date(properties.reportedAt) : new Date()
     });
     const savedSongPost = await newSongPost.save();
     res.status(201).json(savedSongPost);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -60,7 +64,8 @@ router.post('/:id/comments', async (req, res) => {
     const songPost = await SongPost.findById(req.params.id);
     const newComment = {
       username: req.body.username || 'Anonymous',
-      text: req.body.text
+      text: req.body.text,
+      createdAt: new Date()
     };
     songPost.comments.push(newComment);
     await songPost.save();
