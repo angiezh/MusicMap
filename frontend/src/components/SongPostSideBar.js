@@ -7,6 +7,7 @@ const SongPostSideBar = ({
   openAddSongSidebar,
   posts,
 }) => {
+  console.log(posts);
   return (
     <aside className="overlay overlay--add">
       <div className="action-button-container">
@@ -20,8 +21,8 @@ const SongPostSideBar = ({
             <div className="overlay__section-text">Songs in this location:</div>
             {posts.map((post, index) => (
               <SongPost
-                songID={post.song}
-                description={post.description}
+                songID={post.song_id} // Ensure correct property name
+                description={post.description} // Ensure correct property name
                 key={index}
               />
             ))}
