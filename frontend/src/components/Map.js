@@ -26,6 +26,8 @@ const Map = () => {
   const [showAddSongSidebar, setShowAddSongSidebar] = useState(false);
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const [coordinates, setCoordinates] = useState({ lng: null, lat: null });
+  const [posts, setPosts] = useState([]);
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
 
@@ -33,6 +35,11 @@ const Map = () => {
 
   const addPosts = (newPosts) => {
     setPost((prevPosts) => [...prevPosts, ...newPosts]);
+  };
+
+  // for single post
+  const addNewPost = (newPost) => {
+    setPosts((currentPosts) => [...currentPosts, newPost]);
   };
 
   // removes temporary selected marker
@@ -191,9 +198,11 @@ const Map = () => {
                   "icon-size": 1,
                 },
               });
+              setCoordinates({ lng, lat });
 
               // Pulls up add song sidebar
               setShowAddSongSidebar(true);
+              
             }
           });
         });
@@ -246,7 +255,11 @@ const Map = () => {
             removeTempLayer();
             setShowAddSongSidebar(false);
             closePostOverlay();
+            setCoordinates({ lng: null, lat: null });
           }}
+          lng={coordinates.lng}
+          lat={coordinates.lat}
+          addNewPost={addNewPost} // Passing the function to update posts
         />
       )}
       {showSongPostSidebar && (

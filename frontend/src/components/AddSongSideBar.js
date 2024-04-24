@@ -9,10 +9,12 @@ import {
   Card,
   Col,
 } from "react-bootstrap";
+import axios from "axios";
 
-const AddSongSideBar = ({ closeAddSongSidebar, lng, lat }) => {
+const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   const [selectedSong, setSelectedSong] = useState(null);
   const [description, setDescription] = useState("");
+  const [username, setUsername] = useState("");
   const [tracks, setTracks] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -81,40 +83,38 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat }) => {
   }
 
   const addMoment = async () => {
-    if (!selectedSongId || !description) {
-      console.log("No song selected or description provided");
+    if (!selectedSongId || !description || !username) {
+      console.log("All fields are required");
       return;
     }
 
-    const location = [lng, lat];
-
-    const songDetails = {
-      id: selectedSong.id,
-      name: selectedSong.name,
-      artist: selectedSong.artist,
-      album: selectedSong.album,
-      preview_url: selectedSong.preview_url,
-      image_url: selectedSong.image_url,
-    };
-
-    const postBody = {
-      songDetails,
-      description,
-      location,
+    const newSongNote = {
+      type: "Feature",
+      properties: {
+        username: username,
+        song_id: selectedSongId,
+        description: description,
+        likes: 0, // Initial likes set to 0
+        comments: [], // Initial comments set to an empty array
+        reportedAt: new Date().toISOString() // Current timestamp
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [lng, lat] // Longitude and Latitude
+      }
     };
 
     try {
-      const response = await fetch("http://localhost:8800/songposts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postBody),
-      });
-
-      const responseData = await response.json();
-      console.log("Successfully added the song post:", responseData);
+      const response = await axios.post('http://localhost:8800/api/songposts', newSongNote); 
+      console.log("Successfully added the song post:", response.data);
+      addNewPost(response.data);
+      
+      // Close sidebar and reset form after successful submission
+      closeAddSongSidebar();
+      setSelectedSong(null);
+      setSelectedSongId(null);
       setDescription("");
+      setUsername("");
     } catch (error) {
       console.error("Failed to add song post:", error);
     }
@@ -134,6 +134,13 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat }) => {
               What song connects you to this location?
             </div>
             <div className="App">
+              <InputGroup className="mb-3">
+                <FormControl
+                  placeholder="Your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </InputGroup>
               <Container>
                 <InputGroup className="mb-3 search-bar" size="lg">
                   <FormControl
