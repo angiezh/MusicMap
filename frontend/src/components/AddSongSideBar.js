@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import Closebutton from "../assets/closeicon.png";
 import "../styles/addSong.css";
+import searchIcon from "../assets/search-icon.png";
 
 const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   const [selectedSong, setSelectedSong] = useState(null);
@@ -28,6 +29,19 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   useEffect(() => {
     fetchAccessToken();
   }, []);
+
+  useEffect(() => {
+    if (searchInput.length === 0) {
+      setTracks([]);
+      return;
+    }
+
+    const delayDebounce = setTimeout(() => {
+      search();
+    }, 150); // Delays the search call by 175 milliseconds
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchInput]);
 
   const fetchAccessToken = async () => {
     try {
@@ -143,17 +157,15 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
               What song connects you to this location?
             </div>
             <div className="App">
-              <InputGroup className="mb-3">
-                <FormControl
-                  placeholder="Your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </InputGroup>
               <Container>
-                <InputGroup className="mb-3 search-bar" size="lg">
+                <img
+                  src={searchIcon}
+                  alt="search icon"
+                  className="search-icon"
+                />
+                <InputGroup className="search-bar" size="lg">
                   <FormControl
-                    placeholder="Search for Song"
+                    className="searchbar"
                     type="input"
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
@@ -162,12 +174,14 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
                     }}
                     onChange={(event) => setSearchInput(event.target.value)}
                   />
-                  <Button onClick={search}>Search</Button>
+                  <Button onClick={search} className="search-button">
+                    Search
+                  </Button>
                 </InputGroup>
               </Container>
               <Row className="mx-2">
                 {selectedSong ? (
-                  <Col xs={12} className="mb-3">
+                  <Col xs={12} className="mb-3 mt-3">
                     <Card
                       className="song-card"
                       onClick={() => selectSong(null)}
@@ -215,14 +229,23 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
                 )}
               </Row>
             </div>
-            <div className="overlay__section-text">
+            <div className="note-text">
               Write a note (optional)
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="subform"
               ></textarea>
-              <button onClick={addMoment}>Add</button>
+              <InputGroup className="username">
+                <FormControl
+                  placeholder="Username (optional)"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </InputGroup>
+              <button className="add-button" onClick={addMoment}>
+                Add
+              </button>
             </div>
           </section>
         </div>

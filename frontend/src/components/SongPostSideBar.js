@@ -30,17 +30,7 @@ const SongPostSideBar = ({
       <div className="overlay__outer">
         <div className="overlay__content">
           <section>
-            <div
-              className="overlay__section-text"
-              style={{
-                fontSize: "28px",
-                textAlign: "center",
-                fontWeight: "bold",
-                marginBottom: "15px",
-              }}
-            >
-              Songs in this location
-            </div>
+            <div className="overlay__section-text">Songs in this location</div>
             <div
               style={{
                 display: "flex",

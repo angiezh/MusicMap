@@ -9,21 +9,39 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  background-color: #f1f4f5;
+  font-family: "Poppins", sans-serif;
 }
 
-.search-bar button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  background-color: #007bff;
+.searchbar {
+  padding-left: 10px;
+}
+button {
+  background-color: black;
   color: #fff;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  padding: 10px 20px;
+}
+
+.note-text {
+  font-weight: bold;
+  margin-top: 28px;
+  font-size: 20px;
+}
+
+.search-bar button {
+  margin-left: 10px;
 }
 
 .search-bar button:hover {
-  background-color: #0056b3;
+  background-color: #2c2f32;
+}
+
+button.add-button button:hover {
+  background-color: #2c2f32;
 }
 
 .songform,
@@ -36,9 +54,98 @@
   font-size: 12pt;
   margin: auto;
   text-align: left;
+  border-radius: 5px;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 12px;
 }
 
 .close-btn2 {
   margin-left: 28px;
   margin-top: 28px;
+}
+
+.username {
+  margin-bottom: 16px;
+}
+
+input.searchbar.form-control {
+  border: 1px solid #ccc;
+  background-color: #f1f4f5;
+  padding: 8px 52px;
+  font-family: "Poppins", sans-serif;
+  border-radius: 20px;
+  font-size: 16px;
+  z-index: 1;
+}
+
+input.form-control {
+  border: 1px solid #ccc;
+  background-color: #f1f4f5;
+  border-radius: 5px;
+  padding: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.search-icon {
+  margin-bottom: -55px;
+  z-index: 10;
+  position: relative;
+}
+
+.song-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  padding: 24px;
+  width: 500px;
+  background-color: #f1f4f5;
+  margin-left: 18px;
+}
+
+.song-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.song-card .song-card__inner {
+  display: flex;
+  align-items: center;
+}
+
+.song-card .song-card__image {
+  flex: 0 0 auto;
+  margin-right: 20px;
+}
+
+.song-card .song-card__image img {
+  width: 50px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.song-card .song-card__details {
+  flex: 1 1 auto;
+}
+
+.song-card .card-title {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  margin-top: -16px;
+}
+
+.song-card .card-text {
+  color: #000000;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
 }
