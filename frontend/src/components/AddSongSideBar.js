@@ -83,8 +83,8 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   }
 
   const addMoment = async () => {
-    if (!selectedSongId || !description || !username) {
-      console.log("All fields are required");
+    if (!selectedSongId) {
+      console.log("Song required");
       return;
     }
 
@@ -96,19 +96,22 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
         description: description,
         likes: 0, // Initial likes set to 0
         comments: [], // Initial comments set to an empty array
-        reportedAt: new Date().toISOString() // Current timestamp
+        reportedAt: new Date().toISOString(), // Current timestamp
       },
       geometry: {
         type: "Point",
-        coordinates: [lng, lat] // Longitude and Latitude
-      }
+        coordinates: [lng, lat], // Longitude and Latitude
+      },
     };
 
     try {
-      const response = await axios.post('http://localhost:8800/api/songposts', newSongNote); 
+      const response = await axios.post(
+        "http://localhost:8800/api/songposts",
+        newSongNote
+      );
       console.log("Successfully added the song post:", response.data);
       addNewPost(response.data);
-      
+
       // Close sidebar and reset form after successful submission
       closeAddSongSidebar();
       setSelectedSong(null);

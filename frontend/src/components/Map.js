@@ -62,23 +62,24 @@ const Map = () => {
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    axios.get('http://localhost:8800/api/songposts')
-      .then(response => {
+    axios
+      .get("http://localhost:8800/api/songposts")
+      .then((response) => {
         // Handle successful response
-        const postData = response.data.map(post => ({
-          type: 'Feature',
+        const postData = response.data.map((post) => ({
+          type: "Feature",
           properties: {
             id: post._id,
             song_id: post.song_id,
             username: post.username,
             description: post.description,
             likes: post.likes,
-            comments: post.comments
+            comments: post.comments,
           },
           geometry: {
-            type: 'Point',
-            coordinates: post.location.coordinates
-          }
+            type: "Point",
+            coordinates: post.location.coordinates,
+          },
         }));
 
         setPost(postData); // Set the fetched data to post state
@@ -124,9 +125,9 @@ const Map = () => {
             mapInstance.addSource("musicNotes", {
               type: "geojson",
               data: {
-                type: 'FeatureCollection',
-                features: postData
-              }
+                type: "FeatureCollection",
+                features: postData,
+              },
             });
 
             mapInstance.addLayer({
@@ -159,15 +160,15 @@ const Map = () => {
               setSelectedNoteId(id);
               setShowSongPostSidebar(true);
               setShowAddSongSidebar(false);
-            
-              const posts = features.map(feature => ({
+
+              const posts = features.map((feature) => ({
                 username: feature.properties.username,
                 song_id: feature.properties.song_id,
                 description: feature.properties.description,
                 likes: feature.properties.likes,
-                comments: feature.properties.comments
+                comments: feature.properties.comments,
               }));
-            
+
               // Pass the posts to the SongPostSideBar component
               addPosts(posts);
             } else {
@@ -202,7 +203,6 @@ const Map = () => {
 
               // Pulls up add song sidebar
               setShowAddSongSidebar(true);
-              
             }
           });
         });
@@ -224,9 +224,9 @@ const Map = () => {
           }
         };
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle fetch error
-        console.error('Error fetching song posts:', error);
+        console.error("Error fetching song posts:", error);
       });
   }, []);
 
