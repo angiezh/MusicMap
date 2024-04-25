@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import "../styles/infoOverlay.css";
 import MusicNote from "../assets/musicnote.png";
+import Addsongnote from "../assets/Add Song Button.png";
 
 const InfoOverlay = () => {
   const [showInfoOverlay, setShowInfoOverlay] = useState(true);
@@ -65,7 +66,7 @@ const InfoOverlay = () => {
                 </p>
                 <p style={{ textAlign: "left", lineHeight: 1 }}>
                   You can also click
-                  <img src={MusicNote} alt="music note" />
+                  <img src={Addsongnote} alt="music note" />
                   to create your own post
                 </p>
                 <div
