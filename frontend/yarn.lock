@@ -1775,11 +1775,7 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-<<<<<<< HEAD
-"@popperjs/core@^2.11.6":
-=======
 "@popperjs/core@^2.11.6", "@popperjs/core@^2.11.8":
->>>>>>> 6c0d3af9f570c2501cbdbf657ed5c3b4ee6770e6
   version "2.11.8"
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
