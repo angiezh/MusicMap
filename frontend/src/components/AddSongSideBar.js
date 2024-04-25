@@ -10,6 +10,8 @@ import {
   Col,
 } from "react-bootstrap";
 import axios from "axios";
+import Closebutton from "../assets/closeicon.png";
+import "../styles/addSong.css";
 
 const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   const [selectedSong, setSelectedSong] = useState(null);
@@ -126,8 +128,12 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
   return (
     <aside className="overlay overlay--add">
       <div className="action-button-container">
-        <button onClick={closeAddSongSidebar} position="right">
-          close add overlay
+        <button
+          onClick={closeAddSongSidebar}
+          position="right"
+          className="close-btn2"
+        >
+          <img src={Closebutton} alt="close button" />
         </button>
       </div>
       <div className="overlay__outer">

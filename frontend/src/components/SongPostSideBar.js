@@ -3,6 +3,7 @@ import "../styles/sidebar.css"; // Import the sidebar styles
 import SongPost from "./SongPost";
 import Addsongnote from "../assets/Add Song Button.png";
 import Closebutton from "../assets/closeicon.png";
+import "../styles/songPostSidebar.css";
 
 const SongPostSideBar = ({
   closeSongPostSidebar,
@@ -12,42 +13,42 @@ const SongPostSideBar = ({
   console.log(posts);
   return (
     <aside className="overlay overlay--add">
-
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        
-        <button onClick={closeSongPostSidebar} position="right"
-        style={{
-          background: 'none',
-          border: 'none',
-          marginLeft:"20",
-          padding: '0',
-          cursor: 'pointer', 
-        }}
-        >
-          <img src={Closebutton} alt="add note" />
+      <div className="buttons">
+        <button onClick={closeSongPostSidebar} className="close-btn">
+          <img src={Closebutton} alt="close button" />
         </button>
 
         <button
           onClick={() => {
             openAddSongSidebar();
           }}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '0',
-            cursor: 'pointer', 
-          }}
+          className="add-song-btn"
         >
-           <img src={Addsongnote} alt="add note" />
+          <img src={Addsongnote} alt="add note" />
         </button>
-    </div>
-
-
+      </div>
       <div className="overlay__outer">
         <div className="overlay__content">
           <section>
-            <div className="overlay__section-text" style={{ fontSize: '28px', textAlign:"center", fontWeight:"bold", marginBottom:"15px"}}>Songs in this location</div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div
+              className="overlay__section-text"
+              style={{
+                fontSize: "28px",
+                textAlign: "center",
+                fontWeight: "bold",
+                marginBottom: "15px",
+              }}
+            >
+              Songs in this location
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "28px",
+              }}
+            >
               {posts.map((post, index) => (
                 <SongPost
                   songID={post.song_id}
@@ -59,11 +60,8 @@ const SongPostSideBar = ({
                 />
               ))}
             </div>
-
-
           </section>
         </div>
-        
       </div>
     </aside>
   );
