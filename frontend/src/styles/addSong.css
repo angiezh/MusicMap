@@ -28,7 +28,7 @@ button {
 
 .note-text {
   font-weight: bold;
-  margin-top: 28px;
+  margin-top: 20px;
   font-size: 20px;
 }
 
@@ -65,7 +65,7 @@ button.add-button button:hover {
 }
 
 .username {
-  margin-bottom: 16px;
+  margin-top: 24px;
 }
 
 input.searchbar.form-control {

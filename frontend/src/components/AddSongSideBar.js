@@ -229,6 +229,13 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
                 )}
               </Row>
             </div>
+            <InputGroup className="username">
+              <FormControl
+                placeholder="Username (optional)"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </InputGroup>
             <div className="note-text">
               Write a note (optional)
               <textarea
@@ -236,13 +243,6 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
                 onChange={(e) => setDescription(e.target.value)}
                 className="subform"
               ></textarea>
-              <InputGroup className="username">
-                <FormControl
-                  placeholder="Username (optional)"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </InputGroup>
               <button className="add-button" onClick={addMoment}>
                 Add
               </button>
