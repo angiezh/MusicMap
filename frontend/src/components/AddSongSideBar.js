@@ -126,7 +126,9 @@ const AddSongSideBar = ({ closeAddSongSidebar, lng, lat, addNewPost }) => {
         newSongNote
       );
       console.log("Successfully added the song post:", response.data);
-      addNewPost(response.data);
+
+      // Immediately update the map with new song note
+      addNewPost(response.data); // This should handle updating the map's data source
 
       // Close sidebar and reset form after successful submission
       closeAddSongSidebar();
