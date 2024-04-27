@@ -156,6 +156,21 @@ const Map = () => {
                 features: postData,
               },
             });
+
+            mapInstance.addLayer({
+              id: "musicNotePins",
+              type: "symbol",
+              source: "musicNotes",
+              layout: {
+                "icon-image": [
+                  "case",
+                  ["==", ["get", "id"], selectedNoteId],
+                  "selectedMusicNote",
+                  "musicNote",
+                ],
+                "icon-allow-overlap": true,
+              },
+            });
           };
 
           // if user clicks on the map
