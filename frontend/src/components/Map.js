@@ -27,19 +27,46 @@ const Map = () => {
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
   const [coordinates, setCoordinates] = useState({ lng: null, lat: null });
-  const [posts, setPosts] = useState([]);
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
 
-  const [post, setPost] = useState([]); // Declare setPost here
+  const [selectedPosts, setSelectedPosts] = useState([]); // Declare setPost here
 
-  const addPosts = (newPosts) => {
-    setPost((prevPosts) => [...prevPosts, ...newPosts]);
-  };
-
-  // for single post
   const addNewPost = (newPost) => {
-    setPosts((currentPosts) => [...currentPosts, newPost]);
+    setSelectedPosts((prevPosts) => {
+      // Update the state with the new post
+      const updatedPosts = [...prevPosts, newPost];
+
+      // Check if the map and the musicNotes source are loaded
+      if (map.current && map.current.getSource("musicNotes")) {
+        // Retrieve the current data from the source
+        const currentData = map.current.getSource("musicNotes")._data;
+
+        // Create a new feature for the new post
+        const newFeature = {
+          type: "Feature",
+          properties: {
+            id: newPost._id,
+            song_id: newPost.song_id,
+            username: newPost.username,
+            description: newPost.description,
+            likes: newPost.likes,
+            comments: newPost.comments,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: newPost.location.coordinates,
+          },
+        };
+
+        // Update the source data
+        currentData.features.push(newFeature);
+        map.current.getSource("musicNotes").setData(currentData);
+      }
+
+      // Return the updated posts array to update the state
+      return updatedPosts;
+    });
   };
 
   // removes temporary selected marker
@@ -82,7 +109,7 @@ const Map = () => {
           },
         }));
 
-        setPost(postData); // Set the fetched data to post state
+        // setPost(postData); // Set the fetched data to post state
 
         const mapInstance = new maplibregl.Map({
           container: mapContainer.current,
@@ -155,11 +182,13 @@ const Map = () => {
             // if user clicks on the music note
             if (features.length > 0) {
               removeTempLayer();
-              setPost([]);
               const id = features[0].properties.id;
               setSelectedNoteId(id);
               setShowSongPostSidebar(true);
               setShowAddSongSidebar(false);
+
+              const { lng, lat } = e.lngLat;
+              setCoordinates({ lng, lat });
 
               const posts = features.map((feature) => ({
                 username: feature.properties.username,
@@ -170,7 +199,7 @@ const Map = () => {
               }));
 
               // Pass the posts to the SongPostSideBar component
-              addPosts(posts);
+              setSelectedPosts(posts);
             } else {
               // if user clicks on an empty space
               const { lng, lat } = e.lngLat;
@@ -269,7 +298,7 @@ const Map = () => {
             setShowAddSongSidebar(true);
             setShowSongPostSidebar(false);
           }}
-          posts={post}
+          posts={selectedPosts}
         />
       )}
     </>
