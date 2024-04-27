@@ -4,10 +4,19 @@ import "../styles/sidebar.css";
 import playButton from "../assets/play-button.png";
 import pauseButton from "../assets/pause-button.png";
 
-const SongPost = ({ songID, description, username, comments, likes }) => {
+const SongPost = ({
+  songID,
+  description,
+  username,
+  comments,
+  likes,
+  onPlaySong,
+  playingSongId,
+}) => {
+  const isPlaying = songID === playingSongId;
   const [accessToken, setAccessToken] = useState("");
   const [songData, setSongData] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
@@ -63,7 +72,7 @@ const SongPost = ({ songID, description, username, comments, likes }) => {
   }, [accessToken, songID]);
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    onPlaySong(songID);
   };
 
   return (

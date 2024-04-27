@@ -9,6 +9,8 @@ const SongPostSideBar = ({
   closeSongPostSidebar,
   openAddSongSidebar,
   posts,
+  onPlaySong,
+  playingSongId,
 }) => {
   console.log(posts);
   return (
@@ -47,6 +49,8 @@ const SongPostSideBar = ({
                   likes={post.likes}
                   comments={JSON.parse(post.comments)}
                   key={index}
+                  onPlaySong={onPlaySong}
+                  playingSongId={playingSongId}
                 />
               ))}
             </div>
