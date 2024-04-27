@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import "../styles/sidebar.css";
 import playButton from "../assets/play-button.png";
+import pauseButton from "../assets/pause-button.png";
 
 const SongPost = ({ songID, description, username, comments, likes }) => {
   const [accessToken, setAccessToken] = useState("");
@@ -84,17 +85,28 @@ const SongPost = ({ songID, description, username, comments, likes }) => {
             </Col>
             <Col xs={8}>
               <Card.Body>
-                <img
-                  src={playButton}
-                  onClick={handlePlayPause}
-                  alt="play button"
-                  className="play-button"
-                />
-                {isPlaying && (
-                  <audio autoPlay>
-                    <source src={songData.preview_url} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
+                {isPlaying ? (
+                  <div>
+                    <img
+                      src={pauseButton}
+                      onClick={handlePlayPause}
+                      alt="pause button"
+                      className="pause-button"
+                    />
+                    <audio autoPlay>
+                      <source src={songData.preview_url} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      src={playButton}
+                      onClick={handlePlayPause}
+                      alt="play button"
+                      className="play-button"
+                    />
+                  </div>
                 )}
                 <Card.Title>{songData.name}</Card.Title>
                 <Card.Text>
