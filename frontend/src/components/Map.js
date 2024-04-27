@@ -156,21 +156,6 @@ const Map = () => {
                 features: postData,
               },
             });
-
-            mapInstance.addLayer({
-              id: "musicNotePins",
-              type: "symbol",
-              source: "musicNotes",
-              layout: {
-                "icon-image": [
-                  "case",
-                  ["==", ["get", "id"], selectedNoteId],
-                  "selectedMusicNote",
-                  "musicNote",
-                ],
-                "icon-allow-overlap": true,
-              },
-            });
           };
 
           // if user clicks on the map
@@ -187,8 +172,8 @@ const Map = () => {
               setShowSongPostSidebar(true);
               setShowAddSongSidebar(false);
 
-              const { lng, lat } = e.lngLat;
-              setCoordinates({ lng, lat });
+              const coordinates = features[0].geometry.coordinates;
+              setCoordinates({ lng: coordinates[0], lat: coordinates[1] });
 
               const posts = features.map((feature) => ({
                 username: feature.properties.username,
