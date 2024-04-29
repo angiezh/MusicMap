@@ -27,10 +27,20 @@ const Map = () => {
   const [showSongPostSidebar, setShowSongPostSidebar] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(null);
   const [coordinates, setCoordinates] = useState({ lng: null, lat: null });
+  const [playingSongId, setPlayingSongId] = useState(null);
+
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
 
   const [selectedPosts, setSelectedPosts] = useState([]); // Declare setPost here
+
+  const handlePlaySong = (songId) => {
+    if (playingSongId === songId) {
+      setPlayingSongId(null); // If the same song is clicked, stop it
+    } else {
+      setPlayingSongId(songId); // Change to the new song
+    }
+  };
 
   const addNewPost = (newPost) => {
     setSelectedPosts((prevPosts) => {
@@ -187,8 +197,8 @@ const Map = () => {
               setShowSongPostSidebar(true);
               setShowAddSongSidebar(false);
 
-              const { lng, lat } = e.lngLat;
-              setCoordinates({ lng, lat });
+              const coordinates = features[0].geometry.coordinates;
+              setCoordinates({ lng: coordinates[0], lat: coordinates[1] });
 
               const posts = features.map((feature) => ({
                 username: feature.properties.username,
@@ -299,6 +309,8 @@ const Map = () => {
             setShowSongPostSidebar(false);
           }}
           posts={selectedPosts}
+          onPlaySong={handlePlaySong}
+          playingSongId={playingSongId}
         />
       )}
     </>

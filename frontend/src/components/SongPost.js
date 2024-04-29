@@ -2,11 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import "../styles/sidebar.css";
 import playButton from "../assets/play-button.png";
+import pauseButton from "../assets/pause-button.png";
 
-const SongPost = ({ songID, description, username, comments, likes }) => {
+const SongPost = ({
+  songID,
+  description,
+  username,
+  comments,
+  likes,
+  onPlaySong,
+  playingSongId,
+}) => {
+  const isPlaying = songID === playingSongId;
   const [accessToken, setAccessToken] = useState("");
   const [songData, setSongData] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
@@ -62,7 +72,7 @@ const SongPost = ({ songID, description, username, comments, likes }) => {
   }, [accessToken, songID]);
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    onPlaySong(songID);
   };
 
   return (
@@ -84,17 +94,28 @@ const SongPost = ({ songID, description, username, comments, likes }) => {
             </Col>
             <Col xs={8}>
               <Card.Body>
-                <img
-                  src={playButton}
-                  onClick={handlePlayPause}
-                  alt="play button"
-                  className="play-button"
-                />
-                {isPlaying && (
-                  <audio autoPlay>
-                    <source src={songData.preview_url} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
+                {isPlaying ? (
+                  <div>
+                    <img
+                      src={pauseButton}
+                      onClick={handlePlayPause}
+                      alt="pause button"
+                      className="pause-button"
+                    />
+                    <audio autoPlay>
+                      <source src={songData.preview_url} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      src={playButton}
+                      onClick={handlePlayPause}
+                      alt="play button"
+                      className="play-button"
+                    />
+                  </div>
                 )}
                 <Card.Title>{songData.name}</Card.Title>
                 <Card.Text>

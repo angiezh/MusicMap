@@ -4,7 +4,7 @@ import logoImage from "../assets/music-map-logomvp.png";
 
 export default function NavBar() {
   return (
-    <div className="logo-container" style={{height:"20px", weight:"20px"}}>
+    <div className="logo-container">
       <img src={logoImage} alt="MusicMap Logo" />
     </div>
   );
