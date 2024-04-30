@@ -25,6 +25,7 @@ const SongPost = ({
   const [commentText, setCommentText] = useState("");
   const [commentUsername, setCommentUsername] = useState("");
   const [localComments, setLocalComments] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
@@ -114,6 +115,15 @@ const SongPost = ({
     setCommentUsername(""); // Clears the username field
   };
 
+  const handleLikeToggle = () => {
+    if (isLiked) {
+      setIsLiked(false);
+    } else {
+      setIsLiked(true);
+    }
+    handleLike(songID);
+  };
+
   useEffect(() => {
     if (accessToken && songID) {
       fetchSongData();
@@ -180,8 +190,8 @@ const SongPost = ({
                     }}
                   >
                     <button
-                      className="like-button"
-                      onClick={() => handleLike(songID)}
+                      className={`like-button ${isLiked ? "liked" : ""}`}
+                      onClick={handleLikeToggle}
                     >
                       <FontAwesomeIcon icon={faThumbsUp} />
                     </button>
@@ -227,7 +237,8 @@ const SongPost = ({
           <div className="bottom-right-image-container">
             <a
               href={songData.external_urls.spotify}
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bottom-right-image"
             >
               <img src={exportButton} alt="export" className="bottom-image" />

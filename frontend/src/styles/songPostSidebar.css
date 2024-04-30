@@ -108,6 +108,10 @@ h3 {
   padding: 8px;
 }
 
+.like-button.liked {
+  color: black;
+}
+
 .like-button:hover {
   color: black; /* Darker blue on hover */
 }

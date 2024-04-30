@@ -28,6 +28,7 @@ const Map = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(null);
   const [coordinates, setCoordinates] = useState({ lng: null, lat: null });
   const [playingSongId, setPlayingSongId] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
@@ -81,26 +82,32 @@ const Map = () => {
 
   const handleAddComment = async (songID, commentText, commentUsername) => {
     try {
-      const response = await fetch(`http://localhost:8800/api/songposts/${songID}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          text: commentText,
-          username: commentUsername || 'Anonymous'
-        })
-      });
+      const response = await fetch(
+        `http://localhost:8800/api/songposts/${songID}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: commentText,
+            username: commentUsername || "Anonymous",
+          }),
+        }
+      );
       const updatedSongPost = await response.json(); // Now it receives the entire updated song post
-  
-      console.log('Updated song post:', updatedSongPost);
-  
+
+      console.log("Updated song post:", updatedSongPost);
+
       // Update the local state with the entire updated song post
       setSelectedPosts((prevPosts) => {
         return prevPosts.map((post) => {
           if (post.song_id === songID) {
             // Parse the comments string into a JSON object if it's a string
-            const parsedComments = typeof updatedSongPost.comments === 'string' ? JSON.parse(updatedSongPost.comments) : updatedSongPost.comments;
+            const parsedComments =
+              typeof updatedSongPost.comments === "string"
+                ? JSON.parse(updatedSongPost.comments)
+                : updatedSongPost.comments;
             // Merge the parsed comments from the updated post into the existing post
             return { ...post, comments: parsedComments };
           }
@@ -111,27 +118,56 @@ const Map = () => {
       console.error("Failed to add comment:", error);
     }
   };
-  
 
   const handleLike = async (songID) => {
-    try {
-      // Make an API call to your backend to increment the like count
-      const response = await fetch(`http://localhost:8800/api/songposts/${songID}/like`, {
-        method: 'POST',
-      });
-      const updatedPost = await response.json();
-  
-      // Update the local state to reflect the new like count
-      setSelectedPosts((prevPosts) =>
-        prevPosts.map((post) => {
-          if (post.song_id === songID) {
-            return { ...post, likes: updatedPost.likes };
+    if (!isLiked) {
+      try {
+        // Make an API call to your backend to increment the like count
+        const response = await fetch(
+          `http://localhost:8800/api/songposts/${songID}/like`,
+          {
+            method: "POST",
           }
-          return post;
-        }),
-      );
-    } catch (error) {
-      console.error("Failed to like post:", error);
+        );
+        const updatedPost = await response.json();
+
+        // Update the local state to reflect the new like count
+        setSelectedPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.song_id === songID) {
+              return { ...post, likes: updatedPost.likes };
+            }
+            return post;
+          })
+        );
+        setIsLiked(true);
+      } catch (error) {
+        console.error("Failed to like post:", error);
+      }
+    } else {
+      try {
+        // Make an API call to your backend to increment the like count
+        const response = await fetch(
+          `http://localhost:8800/api/songposts/${songID}/unlike`,
+          {
+            method: "POST",
+          }
+        );
+        const updatedPost = await response.json();
+
+        // Update the local state to reflect the new like count
+        setSelectedPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.song_id === songID) {
+              return { ...post, likes: updatedPost.likes };
+            }
+            return post;
+          })
+        );
+        setIsLiked(false);
+      } catch (error) {
+        console.error("Failed to unlike post:", error);
+      }
     }
   };
 
