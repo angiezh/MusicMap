@@ -98,9 +98,12 @@ const SongPost = ({
   };
 
   const submitComment = () => {
-    if (!commentText.trim() || !commentUsername.trim()) return;  // Ensures both text and username fields are not empty
-    handleAddComment(songID, commentText, commentUsername);     // Calls the function passed via props to handle comment addition
-    setLocalComments([...localComments, { username: commentUsername, text: commentText }]); // Adds new comment to local state
+    const trimmedUsername = commentUsername.trim();
+    const usernameToUse = trimmedUsername.length > 0 ? trimmedUsername : "Anonymous";
+    if (!commentText.trim()) return;
+    
+    handleAddComment(songID, commentText, usernameToUse);     // Calls the function passed via props to handle comment addition
+    setLocalComments([...localComments, { username: usernameToUse, text: commentText }]); // Adds new comment to local state
     setCommentText('');    // Clears the comment text field
     setCommentUsername(''); // Clears the username field
   };

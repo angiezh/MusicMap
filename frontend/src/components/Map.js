@@ -13,14 +13,14 @@ import musicNote from "../assets/musicnote.png";
 import SongPostSideBar from "./SongPostSideBar";
 
 const maptilerApiKey = "UHRJl9L3oK7bh3QT6De6";
-const maptilerMapReference = "99cf5fa2-3c1e-4adf-a1c1-fd879b417597";
+const maptilerMapReference = "81f4a9a5-c669-4154-8905-38ffd71706b6";
 
 const Map = () => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const initialState = {
-    lng: -117.71319812050054,
-    lat: 34.099885457669316,
+    lng: -117.71350614401385,
+    lat: 34.09932899451676,
     zoom: 16.5,
   };
   const [showAddSongSidebar, setShowAddSongSidebar] = useState(false);
@@ -111,8 +111,6 @@ const Map = () => {
       console.error("Failed to add comment:", error);
     }
   };
-  
-  
   
 
   const handleLike = async (songID) => {
