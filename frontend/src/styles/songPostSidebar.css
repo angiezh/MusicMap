@@ -83,3 +83,17 @@ h3 {
   margin-top: -56px;
   margin-left: 92px;
 }
+.bottom-right-image-container {
+  position: relative;
+}
+
+.bottom-right-image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.bottom-image {
+  width: 30px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+}

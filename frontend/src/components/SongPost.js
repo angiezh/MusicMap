@@ -4,6 +4,7 @@ import likeIcon from "../assets/like-icon.png";
 import "../styles/sidebar.css";
 import playButton from "../assets/play-button.png";
 import pauseButton from "../assets/pause-button.png";
+import exportButton from "../assets/export-icon.png";
 
 const SongPost = ({
   songID,
@@ -188,6 +189,11 @@ const SongPost = ({
               </Card.Body>
             </Col>
           </Row>
+          <div className = "bottom-right-image-container">
+          <a href= {songData.external_urls.spotify} className="bottom-right-image">
+            <img src={exportButton} alt="Bottom right image" className ="bottom-image" />
+          </a>
+          </div>
         </Card>
       )}
     </div>
