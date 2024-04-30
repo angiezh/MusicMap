@@ -227,6 +227,7 @@ const SongPost = ({
           <div className="bottom-right-image-container">
             <a
               href={songData.external_urls.spotify}
+              target="_blank" rel="noopener noreferrer"
               className="bottom-right-image"
             >
               <img src={exportButton} alt="export" className="bottom-image" />
