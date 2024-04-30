@@ -37,11 +37,11 @@ button {
 }
 
 .search-bar button:hover {
-  background-color: #2c2f32;
+  background-color: #4a4e52;
 }
 
-button.add-button button:hover {
-  background-color: #2c2f32;
+button.add-button:hover {
+  background-color: #4a4e52;
 }
 
 .songform,

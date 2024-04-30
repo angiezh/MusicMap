@@ -94,20 +94,22 @@ h3 {
 }
 
 .bottom-image {
-  width: 30px; 
+  width: 30px;
   height: auto; /* Maintain aspect ratio */
+  margin-bottom: -6px;
 }
 
 .like-button {
   background: none;
   border: none;
-  color: #007bff; /* Bootstrap primary blue for like icon */
+  color: #797b7c;
   cursor: pointer;
-  font-size: 24px; /* Larger font size for better visibility */
+  font-size: 24px;
+  padding: 8px;
 }
 
 .like-button:hover {
-  color: #0056b3; /* Darker blue on hover */
+  color: black; /* Darker blue on hover */
 }
 
 .comment-section {
@@ -116,7 +118,7 @@ h3 {
   padding: 20px;
   background-color: #f9f9f9; /* Light background for the comment section */
   border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .comment-form {
@@ -125,12 +127,22 @@ h3 {
   gap: 10px; /* Space between form elements */
 }
 
-.comment-username-input, .comment-textarea {
-  width: 100%; /* Full width */
+.comments-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+.comment-username-input,
+.comment-textarea {
   padding: 10px;
   border: 2px solid #ccc; /* Solid, light grey border */
   border-radius: 5px; /* Rounded corners for inputs */
   background-color: #fff; /* White background for inputs */
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the width calculation */
 }
 
 .comment-textarea {
@@ -138,17 +150,18 @@ h3 {
 }
 
 .post-comment-button {
-  background-color: #007bff; /* Bright blue background for the button */
+  background-color: black; /* Bright blue background for the button */
   color: white;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer; /* Cursor indicates clickable */
   transition: background-color 0.2s; /* Smooth transition for hover effect */
+  margin-top: 6px;
 }
 
 .post-comment-button:hover {
-  background-color: #0056b3; /* Darken the button on hover */
+  background-color: #4a4e52; /* Darken the button on hover */
 }
 
 .comments-list {
@@ -162,4 +175,9 @@ h3 {
   padding: 8px 12px;
   margin-bottom: 8px; /* Space between comments */
   border-radius: 4px; /* Rounded corners for comments */
+}
+
+.song-info {
+  display: flex;
+  justify-content: space-between;
 }

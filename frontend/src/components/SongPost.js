@@ -5,8 +5,8 @@ import "../styles/songPostSidebar.css";
 import playButton from "../assets/play-button.png";
 import pauseButton from "../assets/pause-button.png";
 import exportButton from "../assets/export-icon.png";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 const SongPost = ({
   songID,
@@ -17,7 +17,7 @@ const SongPost = ({
   onPlaySong,
   playingSongId,
   handleAddComment,
-  handleLike
+  handleLike,
 }) => {
   const isPlaying = songID === playingSongId;
   const [accessToken, setAccessToken] = useState("");
@@ -26,29 +26,31 @@ const SongPost = ({
   const [commentUsername, setCommentUsername] = useState("");
   const [localComments, setLocalComments] = useState([]);
 
-
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
 
   useEffect(() => {
     // Check if comments is a string and parse it
-    if (typeof comments === 'string') {
+    if (typeof comments === "string") {
       try {
         const parsedComments = JSON.parse(comments);
         if (Array.isArray(parsedComments)) {
           setLocalComments(parsedComments);
         } else {
-          console.error('Parsed comments are not an array:', parsedComments);
+          console.error("Parsed comments are not an array:", parsedComments);
           setLocalComments([]);
         }
       } catch (error) {
-        console.error('Error parsing comments:', error);
+        console.error("Error parsing comments:", error);
         setLocalComments([]); // Set to empty array if parsing fails
       }
     } else if (Array.isArray(comments)) {
       setLocalComments(comments);
     } else {
-      console.error('Comments prop is neither an array nor a string:', comments);
+      console.error(
+        "Comments prop is neither an array nor a string:",
+        comments
+      );
       setLocalComments([]);
     }
   }, [comments]);
@@ -99,13 +101,17 @@ const SongPost = ({
 
   const submitComment = () => {
     const trimmedUsername = commentUsername.trim();
-    const usernameToUse = trimmedUsername.length > 0 ? trimmedUsername : "Anonymous";
+    const usernameToUse =
+      trimmedUsername.length > 0 ? trimmedUsername : "Anonymous";
     if (!commentText.trim()) return;
-    
-    handleAddComment(songID, commentText, usernameToUse);     // Calls the function passed via props to handle comment addition
-    setLocalComments([...localComments, { username: usernameToUse, text: commentText }]); // Adds new comment to local state
-    setCommentText('');    // Clears the comment text field
-    setCommentUsername(''); // Clears the username field
+
+    handleAddComment(songID, commentText, usernameToUse); // Calls the function passed via props to handle comment addition
+    setLocalComments([
+      ...localComments,
+      { username: usernameToUse, text: commentText },
+    ]); // Adds new comment to local state
+    setCommentText(""); // Clears the comment text field
+    setCommentUsername(""); // Clears the username field
   };
 
   useEffect(() => {
@@ -117,8 +123,6 @@ const SongPost = ({
   const handlePlayPause = () => {
     onPlaySong(songID);
   };
-
-  
 
   return (
     <div>
@@ -162,33 +166,31 @@ const SongPost = ({
                     />
                   </div>
                 )}
-                <Card.Title>{songData.name}</Card.Title>
-                <Card.Text>
-                  {songData.artists.map((artist) => artist.name).join(", ")}
-                </Card.Text>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <button className="like-button" onClick={() => handleLike(songID)}>
-                    <FontAwesomeIcon icon={faThumbsUp} />
-                  </button>
-                  <span style={{ marginLeft: '5px' }}>{likes}</span>
+                <div className="song-info">
+                  <div>
+                    <Card.Title>{songData.name}</Card.Title>
+                    <Card.Text>
+                      {songData.artists.map((artist) => artist.name).join(", ")}
+                    </Card.Text>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <button
+                      className="like-button"
+                      onClick={() => handleLike(songID)}
+                    >
+                      <FontAwesomeIcon icon={faThumbsUp} />
+                    </button>
+                    <span style={{ marginLeft: "5px", paddingRight: "8px" }}>
+                      {likes}
+                    </span>
+                  </div>
                 </div>
                 <div>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    value={commentUsername}
-                    onChange={(e) => setCommentUsername(e.target.value)}
-                    className="comment-username-input"
-                  />
-                  <textarea
-                    placeholder="Write a comment..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    className="comment-textarea"
-                  />
-                  <button onClick={submitComment} className="post-comment-button">
-                    Post Comment
-                  </button>
                   <ul className="comments-list">
                     {localComments.map((comment, index) => (
                       <li key={comment._id || index}>
@@ -196,14 +198,39 @@ const SongPost = ({
                       </li>
                     ))}
                   </ul>
+                  <div className="comments-area">
+                    <input
+                      type="text"
+                      placeholder="Your name"
+                      value={commentUsername}
+                      onChange={(e) => setCommentUsername(e.target.value)}
+                      className="comment-username-input"
+                    />
+                    <textarea
+                      placeholder="Write a comment..."
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      className="comment-textarea"
+                    />
+                  </div>
+
+                  <button
+                    onClick={submitComment}
+                    className="post-comment-button"
+                  >
+                    Post Comment
+                  </button>
                 </div>
               </Card.Body>
             </Col>
           </Row>
-          <div className = "bottom-right-image-container">
-          <a href= {songData.external_urls.spotify} className="bottom-right-image">
-            <img src={exportButton} alt="Bottom right image" className ="bottom-image" />
-          </a>
+          <div className="bottom-right-image-container">
+            <a
+              href={songData.external_urls.spotify}
+              className="bottom-right-image"
+            >
+              <img src={exportButton} alt="export" className="bottom-image" />
+            </a>
           </div>
         </Card>
       )}
