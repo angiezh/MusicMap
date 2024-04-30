@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
-import likeIcon from "../assets/like-icon.png";
 import "../styles/sidebar.css";
+import "../styles/songPostSidebar.css";
 import playButton from "../assets/play-button.png";
 import pauseButton from "../assets/pause-button.png";
 import exportButton from "../assets/export-icon.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const SongPost = ({
   songID,
@@ -22,18 +24,34 @@ const SongPost = ({
   const [songData, setSongData] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [commentUsername, setCommentUsername] = useState("");
-  // const [isPlaying, setIsPlaying] = useState(false);
+  const [localComments, setLocalComments] = useState([]);
 
-  let parsedComments;
-  try {
-    parsedComments = JSON.parse(comments);
-  } catch (error) {
-    console.error('Failed to parse comments:', error);
-    parsedComments = [];  // Default to an empty array if parsing fails
-  }
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
+
+  useEffect(() => {
+    // Check if comments is a string and parse it
+    if (typeof comments === 'string') {
+      try {
+        const parsedComments = JSON.parse(comments);
+        if (Array.isArray(parsedComments)) {
+          setLocalComments(parsedComments);
+        } else {
+          console.error('Parsed comments are not an array:', parsedComments);
+          setLocalComments([]);
+        }
+      } catch (error) {
+        console.error('Error parsing comments:', error);
+        setLocalComments([]); // Set to empty array if parsing fails
+      }
+    } else if (Array.isArray(comments)) {
+      setLocalComments(comments);
+    } else {
+      console.error('Comments prop is neither an array nor a string:', comments);
+      setLocalComments([]);
+    }
+  }, [comments]);
 
   useEffect(() => {
     fetchAccessToken();
@@ -80,10 +98,11 @@ const SongPost = ({
   };
 
   const submitComment = () => {
-    if (!commentText.trim()) return;
-    handleAddComment(songID, commentText, commentUsername);
-    setCommentText('');
-    setCommentUsername('');
+    if (!commentText.trim() || !commentUsername.trim()) return;  // Ensures both text and username fields are not empty
+    handleAddComment(songID, commentText, commentUsername);     // Calls the function passed via props to handle comment addition
+    setLocalComments([...localComments, { username: commentUsername, text: commentText }]); // Adds new comment to local state
+    setCommentText('');    // Clears the comment text field
+    setCommentUsername(''); // Clears the username field
   };
 
   useEffect(() => {
@@ -96,6 +115,8 @@ const SongPost = ({
     onPlaySong(songID);
   };
 
+  
+
   return (
     <div>
       {songData && (
@@ -106,13 +127,6 @@ const SongPost = ({
                 <Card.Img
                   src={songData.album.images[1].url}
                   className="img-fluid"
-                />
-                {/* Like button next to the album art */}
-                <img
-                  src={likeIcon}
-                  alt="Like"
-                  className="like-button"
-                  onClick={() => handleLike(songID)}
                 />
                 <div>
                   <h3>{username} </h3>
@@ -149,43 +163,37 @@ const SongPost = ({
                 <Card.Text>
                   {songData.artists.map((artist) => artist.name).join(", ")}
                 </Card.Text>
-                {/* <Button variant="primary" onClick={handlePlayPause}>
-                  {isPlaying ? "Pause" : "Play"}
-                </Button> */}
-
-                <h4>Likes: {likes}</h4>
-                {/* Comment form */}
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={commentUsername}
-                  onChange={(e) => setCommentUsername(e.target.value)}
-                  className="commenter-name-input"
-                />
-                <textarea
-                  placeholder="Write a comment..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  className="comment-textarea"
-                />
-                <button onClick={submitComment} className="submit-comment-btn">
-                  Post Comment
-                </button>
-
-                {/* <ul>
-                  {comments.map((comment, index) => (
-                    <li key={index}>
-                      <strong>{comment.username}</strong>: {comment.text}
-                    </li>
-                  ))}
-                </ul> */}
-                <ul>
-                  {Array.isArray(parsedComments) && parsedComments.map((comment, index) => (
-                    <li key={index}>
-                      <strong>{comment.username}</strong>: {comment.text}
-                    </li>
-                  ))}
-                </ul>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <button className="like-button" onClick={() => handleLike(songID)}>
+                    <FontAwesomeIcon icon={faThumbsUp} />
+                  </button>
+                  <span style={{ marginLeft: '5px' }}>{likes}</span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={commentUsername}
+                    onChange={(e) => setCommentUsername(e.target.value)}
+                    className="comment-username-input"
+                  />
+                  <textarea
+                    placeholder="Write a comment..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    className="comment-textarea"
+                  />
+                  <button onClick={submitComment} className="post-comment-button">
+                    Post Comment
+                  </button>
+                  <ul className="comments-list">
+                    {localComments.map((comment, index) => (
+                      <li key={comment._id || index}>
+                        <strong>{comment.username}</strong>: {comment.text}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </Card.Body>
             </Col>
           </Row>

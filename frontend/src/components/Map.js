@@ -13,7 +13,7 @@ import musicNote from "../assets/musicnote.png";
 import SongPostSideBar from "./SongPostSideBar";
 
 const maptilerApiKey = "UHRJl9L3oK7bh3QT6De6";
-const maptilerMapReference = "81f4a9a5-c669-4154-8905-38ffd71706b6";
+const maptilerMapReference = "99cf5fa2-3c1e-4adf-a1c1-fd879b417597";
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -81,7 +81,6 @@ const Map = () => {
 
   const handleAddComment = async (songID, commentText, commentUsername) => {
     try {
-      // Make an API call to your backend to post the new comment
       const response = await fetch(`http://localhost:8800/api/songposts/${songID}/comments`, {
         method: 'POST',
         headers: {
@@ -92,14 +91,18 @@ const Map = () => {
           username: commentUsername || 'Anonymous'
         })
       });
-      const newComment = await response.json();
+      const updatedSongPost = await response.json(); // Now it receives the entire updated song post
   
-      // Now update the local state to reflect the new comment
+      console.log('Updated song post:', updatedSongPost);
+  
+      // Update the local state with the entire updated song post
       setSelectedPosts((prevPosts) => {
         return prevPosts.map((post) => {
           if (post.song_id === songID) {
-            // This assumes your comments are an array in your post object
-            return { ...post, comments: [...post.comments, newComment] };
+            // Parse the comments string into a JSON object if it's a string
+            const parsedComments = typeof updatedSongPost.comments === 'string' ? JSON.parse(updatedSongPost.comments) : updatedSongPost.comments;
+            // Merge the parsed comments from the updated post into the existing post
+            return { ...post, comments: parsedComments };
           }
           return post;
         });
@@ -108,6 +111,9 @@ const Map = () => {
       console.error("Failed to add comment:", error);
     }
   };
+  
+  
+  
 
   const handleLike = async (songID) => {
     try {

@@ -89,66 +89,6 @@ body {
   justify-content: space-between;
 }
 
-.like-button {
-  cursor: pointer;
-  width: 24px; /* Set an appropriate size for the like icon */
-  height: 24px; /* Set an appropriate size for the like icon */
-  position: absolute;
-  top: 10px; /* Adjust as necessary */
-  right: 10px; /* Adjust as necessary */
-}
 
-/* Styles for comment box */
-.comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px; /* Space between form elements */
-  margin-top: 16px; /* Space from the top content */
-}
 
-.comment-form input,
-.comment-form textarea {
-  padding: 10px;
-  border-radius: 4px; /* Rounded borders */
-  border: 1px solid #ccc; /* Light grey border */
-  font-size: 16px; /* Readable font size */
-}
 
-.comment-form textarea {
-  height: 60px; /* Set a fixed height for the text area */
-  resize: vertical; /* Allows the user to resize vertically */
-}
-
-.comment-form button {
-  padding: 10px 20px;
-  background-color: #A03232; /* Color matching the 'Begin' button from the app */
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px; /* Rounded borders */
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-.comment-form button:hover {
-  background-color: darken(#A03232, 10%); /* Slightly darken the button on hover */
-}
-
-/* Styles for the list of comments */
-.comments-list {
-  list-style: none; /* Remove default list styling */
-  padding: 0; /* Remove default padding */
-  margin-top: 16px; /* Space from the comment form */
-}
-
-.comments-list li {
-  background-color: #f0f0f0; /* Light grey background */
-  padding: 8px 12px;
-  border-radius: 4px; /* Rounded borders */
-  margin-bottom: 8px; /* Space between comments */
-}
-
-.comments-list li strong {
-  color: #A03232; /* Color matching the app theme */
-  margin-right: 4px; /* Space between the username and the comment text */
-}

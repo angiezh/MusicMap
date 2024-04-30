@@ -14,11 +14,8 @@ const SongPostSideBar = ({
   handleAddComment,
   handleLike,
 }) => {
-  console.log(typeof posts[0].comments);
-  console.log(posts.map(post => post.comments));
 
   
-
   return (
     <aside className="overlay overlay--add">
       <div className="buttons">
@@ -48,12 +45,14 @@ const SongPostSideBar = ({
               }}
             >
               {posts.map((post, index) => (
+                
                 <SongPost
                   songID={post.song_id}
                   description={post.description}
                   username={post.username}
                   likes={post.likes}
                   comments={post.comments}
+                  {...console.log(post.comments)}
                   key={index}
                   handleAddComment={handleAddComment}
                   handleLike={handleLike}

@@ -16,14 +16,7 @@ const SongPostSchema = new mongoose.Schema({
     },
   },
   likes: { type: Number, default: 0 }, // Count of likes for the song note
-  comments: [
-    {
-      // Array of comments made on the song note
-      username: { type: String, default: "Anonymous" },
-      text: { type: String },
-      createdAt: { type: Date, default: Date.now },
-    },
-  ],
+  comments: { type: [{ username: String, text: String, createdAt: Date }], default: [] },
   reportedAt: { type: Date, default: Date.now }, // Timestamp when the song note was created
 });
 

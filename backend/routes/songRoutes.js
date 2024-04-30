@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
 // Route to like a song post
 router.post('/:id/like', async (req, res) => {
   try {
-    const songPost = await SongPost.findById(req.params.id);
+    const songPost = await SongPost.findOne({ song_id: req.params.id });
     songPost.likes += 1;
     await songPost.save();
     res.status(200).json(songPost);
@@ -58,7 +58,6 @@ router.post('/:id/like', async (req, res) => {
   }
 });
 
-// POST request to add a comment to a song post
 router.post('/:song_id/comments', async (req, res) => {
   try {
     const songPost = await SongPost.findOne({ song_id: req.params.song_id });
@@ -75,8 +74,12 @@ router.post('/:song_id/comments', async (req, res) => {
     songPost.comments.push(newComment);
     await songPost.save();
     
-    res.status(200).json(newComment); // Return the new comment
+    console.log('New comment added:', newComment);
+
+    // Instead of sending just the new comment, send the entire updated song post
+    res.status(200).json(songPost); // Return the updated song post
   } catch (error) {
+    console.error('Error adding comment:', error);
     res.status(500).json({ error: error.message });
   }
 });

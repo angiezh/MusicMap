@@ -94,6 +94,71 @@ h3 {
 }
 
 .bottom-image {
-  width: 30px; /* Adjust the width as needed */
+  width: 30px; 
   height: auto; /* Maintain aspect ratio */
+}
+
+.like-button {
+  background: none;
+  border: none;
+  color: #007bff; /* Bootstrap primary blue for like icon */
+  cursor: pointer;
+  font-size: 24px; /* Larger font size for better visibility */
+}
+
+.like-button:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
+
+/* Comment Form Styling */
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comment-form input, .comment-form textarea {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.comment-form textarea {
+  height: 80px; /* Slightly larger text area */
+  resize: none; /* Disabling resize */
+}
+
+.comment-form button {
+  padding: 10px 20px;
+  background-color: #007bff; /* Matching the primary blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comment-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Styles for the List of Comments */
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.comments-list li {
+  background-color: #e9ecef; /* Light gray background for comments */
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.comments-list li strong {
+  color: #007bff; /* Using primary color for username */
+  font-weight: bold; /* Making username bold */
 }
