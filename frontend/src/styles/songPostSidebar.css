@@ -110,55 +110,56 @@ h3 {
   color: #0056b3; /* Darker blue on hover */
 }
 
-/* Comment Form Styling */
+.comment-section {
+  max-width: 600px; /* Limit the width for better control */
+  margin: auto; /* Center align the section */
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for the comment section */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
 .comment-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 10px; /* Space between form elements */
 }
 
-.comment-form input, .comment-form textarea {
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+.comment-username-input, .comment-textarea {
+  width: 100%; /* Full width */
+  padding: 10px;
+  border: 2px solid #ccc; /* Solid, light grey border */
+  border-radius: 5px; /* Rounded corners for inputs */
+  background-color: #fff; /* White background for inputs */
 }
 
-.comment-form textarea {
-  height: 80px; /* Slightly larger text area */
-  resize: none; /* Disabling resize */
+.comment-textarea {
+  height: 80px; /* Larger area for text input */
 }
 
-.comment-form button {
-  padding: 10px 20px;
-  background-color: #007bff; /* Matching the primary blue */
+.post-comment-button {
+  background-color: #007bff; /* Bright blue background for the button */
   color: white;
   border: none;
+  padding: 10px 15px;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  cursor: pointer; /* Cursor indicates clickable */
+  transition: background-color 0.2s; /* Smooth transition for hover effect */
 }
 
-.comment-form button:hover {
-  background-color: #0056b3;
+.post-comment-button:hover {
+  background-color: #0056b3; /* Darken the button on hover */
 }
 
-/* Styles for the List of Comments */
 .comments-list {
-  list-style: none;
+  list-style-type: none; /* No bullets */
   padding: 0;
-  margin-top: 10px;
+  margin-top: 20px; /* Space from the form to the list */
 }
 
 .comments-list li {
-  background-color: #e9ecef; /* Light gray background for comments */
-  padding: 8px;
-  border-radius: 5px;
-  margin-bottom: 5px;
-}
-
-.comments-list li strong {
-  color: #007bff; /* Using primary color for username */
-  font-weight: bold; /* Making username bold */
+  background-color: #eaeaea; /* Slightly grey background for each comment */
+  padding: 8px 12px;
+  margin-bottom: 8px; /* Space between comments */
+  border-radius: 4px; /* Rounded corners for comments */
 }
