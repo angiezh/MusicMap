@@ -28,7 +28,7 @@ const Map = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(null);
   const [coordinates, setCoordinates] = useState({ lng: null, lat: null });
   const [playingSongId, setPlayingSongId] = useState(null);
-  const [isLiked, setIsLiked] = useState(false);
+  const [likedPosts, setLikedPosts] = useState({});
 
   const tempLayerId = "tempMusicNoteLayer";
   const tempSourceId = "tempMusicNote";
@@ -119,8 +119,9 @@ const Map = () => {
     }
   };
 
-  const handleLike = async (songID) => {
-    if (!isLiked) {
+  const handleLike = async (songID, isLiked) => {
+    setLikedPosts((prev) => ({ ...prev, [songID]: isLiked }));
+    if (isLiked) {
       try {
         // Make an API call to your backend to increment the like count
         const response = await fetch(
@@ -140,7 +141,6 @@ const Map = () => {
             return post;
           })
         );
-        setIsLiked(true);
       } catch (error) {
         console.error("Failed to like post:", error);
       }
@@ -164,7 +164,6 @@ const Map = () => {
             return post;
           })
         );
-        setIsLiked(false);
       } catch (error) {
         console.error("Failed to unlike post:", error);
       }
@@ -402,9 +401,10 @@ const Map = () => {
           }}
           posts={selectedPosts}
           handleAddComment={handleAddComment}
-          handleLike={handleLike}
           onPlaySong={handlePlaySong}
           playingSongId={playingSongId}
+          handleLike={handleLike}
+          likedPosts={likedPosts}
         />
       )}
     </>

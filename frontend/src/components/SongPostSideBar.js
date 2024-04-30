@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import "../styles/sidebar.css"; // Import the sidebar styles
 import SongPost from "./SongPost";
 import Addsongnote from "../assets/Add Song Button.png";
@@ -13,9 +14,8 @@ const SongPostSideBar = ({
   playingSongId,
   handleAddComment,
   handleLike,
+  likedPosts,
 }) => {
-
-  
   return (
     <aside className="overlay overlay--add">
       <div className="buttons">
@@ -45,7 +45,6 @@ const SongPostSideBar = ({
               }}
             >
               {posts.map((post, index) => (
-                
                 <SongPost
                   songID={post.song_id}
                   description={post.description}
@@ -55,9 +54,10 @@ const SongPostSideBar = ({
                   {...console.log(post.comments)}
                   key={index}
                   handleAddComment={handleAddComment}
-                  handleLike={handleLike}
                   onPlaySong={onPlaySong}
                   playingSongId={playingSongId}
+                  isLiked={!!likedPosts[post.song_id]}
+                  handleLike={handleLike}
                 />
               ))}
             </div>

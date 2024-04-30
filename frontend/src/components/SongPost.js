@@ -18,6 +18,7 @@ const SongPost = ({
   playingSongId,
   handleAddComment,
   handleLike,
+  isLiked,
 }) => {
   const isPlaying = songID === playingSongId;
   const [accessToken, setAccessToken] = useState("");
@@ -25,7 +26,6 @@ const SongPost = ({
   const [commentText, setCommentText] = useState("");
   const [commentUsername, setCommentUsername] = useState("");
   const [localComments, setLocalComments] = useState([]);
-  const [isLiked, setIsLiked] = useState(false);
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
@@ -116,12 +116,7 @@ const SongPost = ({
   };
 
   const handleLikeToggle = () => {
-    if (isLiked) {
-      setIsLiked(false);
-    } else {
-      setIsLiked(true);
-    }
-    handleLike(songID);
+    handleLike(songID, !isLiked); // Pass songID and the new liked state
   };
 
   useEffect(() => {
