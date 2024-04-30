@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import likeIcon from "../assets/like-icon.png";
 import "../styles/sidebar.css";
 import playButton from "../assets/play-button.png";
 import pauseButton from "../assets/pause-button.png";
@@ -12,11 +13,23 @@ const SongPost = ({
   likes,
   onPlaySong,
   playingSongId,
+  handleAddComment,
+  handleLike
 }) => {
   const isPlaying = songID === playingSongId;
   const [accessToken, setAccessToken] = useState("");
   const [songData, setSongData] = useState(null);
+  const [commentText, setCommentText] = useState("");
+  const [commentUsername, setCommentUsername] = useState("");
   // const [isPlaying, setIsPlaying] = useState(false);
+
+  let parsedComments;
+  try {
+    parsedComments = JSON.parse(comments);
+  } catch (error) {
+    console.error('Failed to parse comments:', error);
+    parsedComments = [];  // Default to an empty array if parsing fails
+  }
 
   const SPOTIFY_CLIENT_ID = "cd433caa648d451aa7bbdccaea7658a6";
   const SPOTIFY_CLIENT_SECRET = "5069acac77184a78a302939392c4d9ec";
@@ -65,6 +78,13 @@ const SongPost = ({
     }
   };
 
+  const submitComment = () => {
+    if (!commentText.trim()) return;
+    handleAddComment(songID, commentText, commentUsername);
+    setCommentText('');
+    setCommentUsername('');
+  };
+
   useEffect(() => {
     if (accessToken && songID) {
       fetchSongData();
@@ -85,6 +105,13 @@ const SongPost = ({
                 <Card.Img
                   src={songData.album.images[1].url}
                   className="img-fluid"
+                />
+                {/* Like button next to the album art */}
+                <img
+                  src={likeIcon}
+                  alt="Like"
+                  className="like-button"
+                  onClick={() => handleLike(songID)}
                 />
                 <div>
                   <h3>{username} </h3>
@@ -126,14 +153,37 @@ const SongPost = ({
                 </Button> */}
 
                 <h4>Likes: {likes}</h4>
+                {/* Comment form */}
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={commentUsername}
+                  onChange={(e) => setCommentUsername(e.target.value)}
+                  className="commenter-name-input"
+                />
+                <textarea
+                  placeholder="Write a comment..."
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  className="comment-textarea"
+                />
+                <button onClick={submitComment} className="submit-comment-btn">
+                  Post Comment
+                </button>
+
+                {/* <ul>
+                  {comments.map((comment, index) => (
+                    <li key={index}>
+                      <strong>{comment.username}</strong>: {comment.text}
+                    </li>
+                  ))}
+                </ul> */}
                 <ul>
-                  {comments &&
-                    Array.isArray(comments) &&
-                    comments.map((comment, index) => (
-                      <li key={index}>
-                        <strong>{comment.username}</strong>: {comment.text}
-                      </li>
-                    ))}
+                  {Array.isArray(parsedComments) && parsedComments.map((comment, index) => (
+                    <li key={index}>
+                      <strong>{comment.username}</strong>: {comment.text}
+                    </li>
+                  ))}
                 </ul>
               </Card.Body>
             </Col>

@@ -79,6 +79,58 @@ const Map = () => {
     });
   };
 
+  const handleAddComment = async (songID, commentText, commentUsername) => {
+    try {
+      // Make an API call to your backend to post the new comment
+      const response = await fetch(`http://localhost:8800/api/songposts/${songID}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: commentText,
+          username: commentUsername || 'Anonymous'
+        })
+      });
+      const newComment = await response.json();
+  
+      // Now update the local state to reflect the new comment
+      setSelectedPosts((prevPosts) => {
+        return prevPosts.map((post) => {
+          if (post.song_id === songID) {
+            // This assumes your comments are an array in your post object
+            return { ...post, comments: [...post.comments, newComment] };
+          }
+          return post;
+        });
+      });
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
+  };
+
+  const handleLike = async (songID) => {
+    try {
+      // Make an API call to your backend to increment the like count
+      const response = await fetch(`http://localhost:8800/api/songposts/${songID}/like`, {
+        method: 'POST',
+      });
+      const updatedPost = await response.json();
+  
+      // Update the local state to reflect the new like count
+      setSelectedPosts((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post.song_id === songID) {
+            return { ...post, likes: updatedPost.likes };
+          }
+          return post;
+        }),
+      );
+    } catch (error) {
+      console.error("Failed to like post:", error);
+    }
+  };
+
   // removes temporary selected marker
   const removeTempLayer = () => {
     if (map.current.getLayer(tempLayerId)) {
@@ -309,6 +361,8 @@ const Map = () => {
             setShowSongPostSidebar(false);
           }}
           posts={selectedPosts}
+          handleAddComment={handleAddComment}
+          handleLike={handleLike}
           onPlaySong={handlePlaySong}
           playingSongId={playingSongId}
         />
